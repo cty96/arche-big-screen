@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/showcase-cover.css">
-<style>.cover{--cover-bg:url('assets/g6-alloy-cover-bg.png');transition:background-image .28s var(--ease);}</style>
+<style>.cover{background-image:url('assets/g6-alloy-cover-bg.png');transition:background-image .28s var(--ease);}</style>
 </head>
 <body>
 <main class="cover dense" id="cover">
@@ -62,7 +62,7 @@ const ids=['brand','meta','kicker','title','subtitle','intro'];
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
     const page=pages[tab.dataset.page];
-    cover.style.setProperty('--cover-bg',page.bg);
+    cover.style.backgroundImage=page.bg;
     ids.forEach(id=>document.getElementById(id).innerHTML=page[id]);
     document.getElementById('signal').innerHTML=page.signal.map(item=>`<span>${item}</span>`).join('');
     document.querySelectorAll('.tab').forEach(item=>item.setAttribute('aria-selected',String(item===tab)));

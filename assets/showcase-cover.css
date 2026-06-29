@@ -16,7 +16,6 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   inset:0;
   overflow:hidden;
   background-color:#070b12;
-  background-image:var(--cover-bg);
   background-position:center center;
   background-size:cover;
   background-repeat:no-repeat;
