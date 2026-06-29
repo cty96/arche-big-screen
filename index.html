@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHE：颠覆化学反应机理发现范式</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#ffffff; --ink-soft:rgba(255,255,255,.78); --ink-mute:rgba(255,255,255,.62); --ink-faint:rgba(255,255,255,.42);
+  --paper:#070b12; --paper-warm:#0d121c; --paper-cool:#0a0f17;
+  --rule:#344052; --rule-soft:#18202a;
+  --blue-1:#1e2d42; --blue-2:#2a3e5e; --blue-3:#385886; --blue-4:#4f78b2;
+  --blue-5:#6fa3dc; --blue-6:#8db9ea; --blue-7:#c0dcff;
+  --accent-blue:#8dccff; --accent-blue-soft:#5caaff;
+  --success:#a4b870; --success-bg:#1d2418; --success-deep:#c0d490;
+  --font-sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+  --font-serif:var(--font-sans);
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+  --ease:cubic-bezier(.2,0,0,1);
+  --fs-9:max(11px,1.16vh); --fs-10:max(12px,1.31vh); --fs-11:max(13px,1.43vh);
+  --fs-12:max(14px,1.56vh);--fs-13:max(16px,1.70vh);--fs-14:max(17px,1.82vh);
+  --fs-16:max(19px,2.05vh);--fs-18:max(21px,2.30vh);--fs-20:max(24px,2.58vh);
+  --fs-22:max(27px,2.86vh);--fs-24:max(30px,3.12vh);--fs-28:max(34px,3.62vh);--fs-34:max(41px,4.42vh);
+  --sp-2:max(2px,0.20vh); --sp-3:max(2px,0.28vh); --sp-4:max(3px,0.37vh); --sp-5:max(4px,0.46vh);
+  --sp-6:max(5px,0.56vh); --sp-8:max(6px,0.74vh); --sp-10:max(8px,0.93vh); --sp-12:max(9px,1.11vh);
+  --sp-14:max(11px,1.30vh);--sp-16:max(12px,1.48vh);--sp-18:max(14px,1.67vh);--sp-20:max(15px,1.85vh);
+  --sp-24:max(18px,2.22vh);--sp-28:max(21px,2.60vh);--sp-32:max(24px,2.96vh);
+}
+html{color-scheme:dark;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#070b12;}
+body{font-family:var(--font-sans); color:var(--ink); background:var(--paper); font-size:var(--fs-14); line-height:1.55; -webkit-font-smoothing:antialiased;}
+.ref-icon{width:1em; height:1em; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;}
+.app-icon{font-size:var(--fs-28); color:rgba(241,245,251,.84); flex-shrink:0; filter:drop-shadow(0 0 12px rgba(128,191,255,.16));}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}}
+
+.cover-page,.detail-page{transition:opacity .42s var(--ease),visibility .42s var(--ease);}
+.cover-page{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; background:#070b12 url('assets/arche-cover-bg.png') center center / cover no-repeat; opacity:1; visibility:visible; pointer-events:auto;}
+.cover-page::before{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(5,8,13,.96) 0%,rgba(5,8,13,.82) 31%,rgba(5,8,13,.36) 62%,rgba(5,8,13,.10) 100%),radial-gradient(70% 85% at 24% 38%,rgba(92,170,255,.18),transparent 56%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 28%);}
+.cover-page::after{content:''; position:absolute; width:150%; height:280px; left:-34%; top:3%; pointer-events:none; background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),rgba(141,204,255,.12),transparent); filter:blur(118px); transform:rotate(-34deg); mix-blend-mode:screen;}
+.cover-shell{position:relative; z-index:1; height:100%; display:grid; grid-template-rows:auto 1fr auto; padding:max(28px,3.2vh) max(72px,5.2vw) max(48px,5vh);}
+.cover-topline{display:flex; align-items:center; justify-content:space-between; font-family:var(--font-mono); font-size:max(12px,1.2vh); letter-spacing:.28em; text-transform:uppercase; color:rgba(247,251,255,.44);}
+.cover-brand{font-size:max(22px,2.3vh); font-weight:600; letter-spacing:.18em; color:rgba(247,251,255,.94);}
+.cover-meta{display:flex; align-items:center; gap:max(14px,1.2vw);}
+.cover-meta::before{content:'//'; color:rgba(247,251,255,.28);}
+.cover-hero{display:flex; align-items:center; max-width:min(920px,52vw);}
+.cover-content{transform:translateY(max(-36px,-3.6vh));}
+.cover-kicker{display:inline-flex; align-items:center; gap:max(10px,.8vw); margin-bottom:max(24px,2.8vh); font-family:var(--font-mono); font-size:max(12px,1.22vh); letter-spacing:.22em; text-transform:uppercase; color:rgba(141,204,255,.82);}
+.cover-kicker::before{display:none;}
+.cover-title{max-width:900px; font-size:clamp(52px,5.8vw,104px); font-weight:300; line-height:1.04; letter-spacing:.02em; text-wrap:balance; text-shadow:0 0 34px rgba(92,170,255,.10);}
+.cover-title strong{display:block; font-family:var(--font-mono); font-size:.82em; font-weight:600; letter-spacing:.08em; color:var(--ink);}
+.cover-subtitle{margin-top:max(18px,2vh); font-size:clamp(22px,2.15vw,38px); font-weight:300; line-height:1.2; color:rgba(247,251,255,.88);}
+.cover-intro{margin-top:max(28px,3.1vh); max-width:780px; font-size:clamp(17px,1.25vw,24px); line-height:1.86; color:rgba(247,251,255,.78); letter-spacing:.025em;}
+.cover-intro em{font-style:normal; color:rgba(141,204,255,.92);}
+.cover-bottom{display:flex; align-items:flex-end; justify-content:space-between; gap:32px;}
+.cover-signal{display:grid; grid-template-columns:repeat(3,auto); gap:max(18px,1.5vw); color:rgba(247,251,255,.54); font-family:var(--font-mono); font-size:max(11px,1.08vh); letter-spacing:.14em; text-transform:uppercase;}
+.cover-signal span{display:inline-flex; align-items:center; gap:10px;}
+.cover-signal span::before{content:''; width:5px; height:5px; border-radius:50%; background:var(--accent-blue); box-shadow:0 0 14px rgba(141,204,255,.72);}
+.cover-entry{position:relative; display:inline-flex; align-items:center; gap:max(16px,1.2vw); min-width:max(260px,16vw); justify-content:space-between; text-decoration:none; color:var(--ink); border:1px solid rgba(141,204,255,.28); border-radius:6px; background:rgba(9,15,24,.54); padding:max(17px,1.7vh) max(22px,1.7vw); box-shadow:0 18px 50px rgba(0,0,0,.42),0 0 34px rgba(92,170,255,.11); overflow:hidden; backdrop-filter:blur(18px); transition:transform .22s var(--ease),border-color .22s var(--ease),background .22s var(--ease),box-shadow .22s var(--ease);}
+.cover-entry::before{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg,transparent,rgba(141,204,255,.16),transparent); transform:translateX(-110%); transition:transform .45s var(--ease);}
+.cover-entry:hover{transform:translateY(-2px); border-color:rgba(141,204,255,.52); background:rgba(12,22,34,.66); box-shadow:0 24px 64px rgba(0,0,0,.48),0 0 48px rgba(92,170,255,.18);}
+.cover-entry:hover::before{transform:translateX(110%);}
+.cover-entry:active{transform:translateY(0);}
+.cover-entry-label{position:relative; display:flex; flex-direction:column; gap:4px;}
+.cover-entry-label b{font-size:max(18px,1.75vh); font-weight:400; letter-spacing:.05em;}
+.cover-entry-label small{font-family:var(--font-mono); font-size:max(10px,1vh); color:rgba(247,251,255,.48); letter-spacing:.18em; text-transform:uppercase;}
+.cover-entry-arrow{position:relative; width:max(44px,4.2vh); aspect-ratio:1; border-radius:50%; display:grid; place-items:center; border:1px solid rgba(255,255,255,.10); color:var(--accent-blue); font-family:var(--font-mono); font-size:max(24px,2.5vh); line-height:1;}
+.home-link{color:inherit; text-decoration:none; cursor:pointer;}
+.home-link:hover .hd-brand,.cover-home:hover{color:#fff; text-shadow:0 0 18px rgba(141,204,255,.24);}
+.detail-page{opacity:0; visibility:hidden; pointer-events:none;}
+body:has(#detail:target) .cover-page{opacity:0; visibility:hidden; pointer-events:none;}
+body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-events:auto;}
+
+.stage{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; display:grid; grid-template-rows:auto 1fr; gap:max(20px,2.2vh); padding:max(22px,2.6vh) max(42px,4.3vw) max(34px,3.8vh); background:#070b12;}
+.stage::before{content:''; position:absolute; z-index:0; pointer-events:none; width:190%; height:320px; left:-42%; top:-2%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),rgba(141,204,255,.10),transparent); filter:blur(118px); transform:rotate(-34deg); mix-blend-mode:screen;}
+.stage::after{content:''; position:absolute; z-index:0; pointer-events:none; width:158%; height:280px; left:-2%; top:7%; background:linear-gradient(90deg,transparent,rgba(92,170,255,.17),rgba(255,255,255,.08),transparent); filter:blur(128px); transform:rotate(-34deg); mix-blend-mode:screen;}
+.stage>*{position:relative; z-index:1;}
+
+.title-block{display:flex; align-items:flex-start; min-height:auto; padding:0 0 max(22px,2.5vh);}
+.hd-title{font-family:var(--font-mono); font-size:var(--fs-11); font-weight:400; color:rgba(241,245,251,.62); line-height:1; letter-spacing:.30em; display:flex; align-items:center; gap:var(--sp-14); text-transform:uppercase;}
+.hd-brand{font-size:var(--fs-20); font-weight:600; color:rgba(241,245,251,.94); letter-spacing:.16em; text-shadow:none;}
+.hd-title em{font-style:normal; color:rgba(241,245,251,.62);}
+.hd-title em::before{content:'//'; margin-right:var(--sp-14); color:rgba(241,245,251,.34);}
+
+.board{display:grid; grid-template-columns:1fr 1.03fr 1fr; grid-template-rows:1.20fr .88fr .90fr; gap:max(24px,2.8vh); min-height:0;}
+.module{position:relative; min-width:0; min-height:0; display:flex; flex-direction:column;}
+.panel{position:relative; flex:1; min-height:0; border:1px solid rgba(255,255,255,.04); border-radius:6px; background:rgba(9,12,20,.40); backdrop-filter:blur(24px); overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.50);}
+.panel::before{content:''; position:absolute; inset:0; pointer-events:none; background:radial-gradient(80% 140% at 12% 0%,rgba(128,191,255,.07),transparent 52%);}
+.layer-badge{position:absolute; left:max(28px,2.4vw); right:max(28px,2.4vw); top:max(18px,1.9vh); z-index:4; display:block; font-family:var(--font-mono); font-size:var(--fs-10); font-weight:500; line-height:1; color:rgba(255,255,255,.74); letter-spacing:.25em; text-transform:uppercase; padding-bottom:var(--sp-12); border-bottom:1px solid rgba(255,255,255,.07);}
+.app-layer{grid-column:1 / 4; grid-row:1; order:1; display:grid; grid-template-columns:1fr;}
+.capability-layer{grid-column:1 / 4; grid-row:2; order:2; display:grid; grid-template-columns:1fr;}
+.model-layer{grid-column:1 / 4; grid-row:3; order:3; display:grid; grid-template-columns:1fr;}
+.app-layer .panel{background:rgba(14,22,34,.62); border-color:rgba(141,204,255,.16); box-shadow:0 30px 86px rgba(0,0,0,.60),0 0 70px rgba(92,170,255,.14);}
+.app-layer .panel::before{background:radial-gradient(52% 170% at 48% 18%,rgba(141,204,255,.18),rgba(92,170,255,.08) 36%,transparent 64%),radial-gradient(80% 140% at 12% 0%,rgba(255,255,255,.08),transparent 52%);}
+.model-layer .panel{background:rgba(9,12,20,.34); box-shadow:0 18px 54px rgba(0,0,0,.46);}
+.capability-layer .panel{background:rgba(10,15,24,.38); border-color:rgba(255,255,255,.045); box-shadow:0 18px 58px rgba(0,0,0,.50),0 0 24px rgba(92,170,255,.025);}
+.capability-layer .panel::before{background:radial-gradient(52% 150% at 50% 46%,rgba(92,170,255,.055),transparent 60%),radial-gradient(80% 140% at 12% 0%,rgba(128,191,255,.045),transparent 54%);}
+
+.app-shell{padding:max(58px,5.6vh) max(46px,3.6vw) max(24px,2.4vh); display:grid; grid-template-columns:1.18fr .82fr; gap:max(28px,2.6vw); align-items:stretch;}
+.app-zone{position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; gap:var(--sp-18); min-width:0; border:1px solid rgba(255,255,255,.06); border-radius:5px; background:rgba(255,255,255,.01); padding:max(22px,2.4vh) max(28px,2.2vw); overflow:hidden; box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+.app-zone::before{content:''; position:absolute; inset:0; z-index:0; pointer-events:none; background-image:var(--app-bg); background-size:cover; background-position:center right; opacity:.62; transform:scale(1.02);}
+.app-zone::after{content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(90deg,rgba(8,11,17,.88) 0%,rgba(8,11,17,.68) 42%,rgba(8,11,17,.42) 100%),radial-gradient(74% 130% at 18% 45%,rgba(141,204,255,.22),rgba(92,170,255,.08) 38%,transparent 62%);}
+.app-zone.mechanism-card{--app-bg:url('assets/app-mechanism-bg.png');}
+.app-zone.production-card{--app-bg:url('assets/app-production-bg.png');}
+.app-zone + .app-zone{box-shadow:none;}
+.app-copy{position:relative; z-index:2; display:flex; flex-direction:column; gap:var(--sp-10); min-width:0;}
+.app-head{display:flex; align-items:center; gap:var(--sp-14); padding-bottom:var(--sp-16); border-bottom:1px solid rgba(255,255,255,.08);}
+.app-title{font-family:var(--font-sans); font-size:var(--fs-20); font-weight:400; color:rgba(255,255,255,.96); letter-spacing:.04em;}
+.app-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-8) var(--sp-14);}
+.chip{position:relative; font-size:var(--fs-12); font-weight:400; color:rgba(255,255,255,.76); padding:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:.03em;}
+.chip::before{content:''; display:inline-block; width:4px; height:4px; margin-right:var(--sp-8); border-radius:50%; background:rgba(255,255,255,.28); vertical-align:middle;}
+
+.capability-shell{padding:max(50px,4.8vh) max(38px,3vw) max(18px,1.8vh); display:grid; grid-template-columns:1fr clamp(78px,7.5vw,140px) clamp(220px,15vw,300px) clamp(78px,7.5vw,140px) 1fr; gap:var(--sp-18); align-items:stretch;}
+.cap-zone{position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; gap:var(--sp-14); min-width:0; border:1px solid rgba(255,255,255,.03); background:rgba(255,255,255,.01); border-radius:5px; padding:max(16px,1.7vh) max(22px,1.7vw);}
+.cap-title{display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:var(--sp-12); font-family:var(--font-sans); font-size:var(--fs-18); font-weight:400; color:rgba(255,255,255,.94); line-height:1.15; letter-spacing:.04em; padding-bottom:var(--sp-12); border-bottom:1px solid rgba(255,255,255,.05);}
+.cap-title span{flex-shrink:0; font-size:var(--fs-10); font-weight:400; color:rgba(255,255,255,.78); letter-spacing:.14em; border:1px solid rgba(255,255,255,.09); border-radius:999px; padding:var(--sp-4) var(--sp-8); background:rgba(255,255,255,.035);}
+.cap-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-8);}
+.cap-item{position:relative; display:flex; align-items:center; gap:var(--sp-10); min-width:0; color:rgba(255,255,255,.78); font-size:var(--fs-12); font-weight:400; background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.03); border-radius:5px; padding:var(--sp-8) var(--sp-12);}
+.cap-item .ref-icon{font-size:var(--fs-16); color:rgba(255,255,255,.70); flex-shrink:0;}
+.cap-loop{position:relative; z-index:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--sp-8); padding:var(--sp-8); background:rgba(255,255,255,.015); border-radius:5px; overflow:hidden;}
+.cap-loop::before{content:''; position:absolute; inset:-22%; pointer-events:none; background:radial-gradient(circle at 50% 42%,rgba(92,170,255,.08),rgba(92,170,255,.025) 34%,transparent 64%); opacity:.52;}
+.cap-loop>*{position:relative; z-index:1;}
+.cap-engine-core{position:relative; width:clamp(44px,4.8vh,68px); height:clamp(44px,4.8vh,68px); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--accent-blue); background:#11151e; font-family:var(--font-mono); font-size:var(--fs-16); border:1px solid rgba(141,204,255,.14); box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 20px rgba(92,170,255,.14);}
+.cap-engine-core .ref-icon{font-size:var(--fs-24); color:rgba(241,245,251,.90);}
+.cap-engine-title{font-family:var(--font-sans); font-size:var(--fs-18); font-weight:400; color:rgba(255,255,255,.95); line-height:1.16; text-align:center; white-space:nowrap; width:100%; padding-bottom:var(--sp-8); border-bottom:1px solid rgba(255,255,255,.06);}
+.cap-engine-title span{color:var(--accent-blue);}
+.cap-engine-steps{display:grid; gap:0; width:100%; margin-top:var(--sp-2); padding:0 var(--sp-4); background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.04); border-radius:5px;}
+.cap-engine-step{position:relative; font-size:var(--fs-10); color:rgba(255,255,255,.76); font-weight:400; line-height:1.25; text-align:center; padding:var(--sp-6) var(--sp-8); border-radius:0; background:transparent;}
+.cap-engine-step + .cap-engine-step{border-top:1px solid rgba(255,255,255,.035);}
+.cap-stream{position:relative; min-width:0; min-height:0; overflow:hidden;}
+.cap-stream::before,.cap-stream::after{content:''; position:absolute; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(141,204,255,.20),transparent); opacity:.62;}
+.cap-stream::before{top:38%;}
+.cap-stream::after{top:62%; background:linear-gradient(90deg,transparent,rgba(164,184,112,.20),transparent);}
+.cap-particle{position:absolute; width:16px; height:3px; border-radius:999px; background:linear-gradient(90deg,transparent,rgba(192,220,255,.18),var(--blue-7)); top:38%; left:0; transform:translateY(-50%); opacity:.86; filter:drop-shadow(0 0 6px rgba(141,185,234,.65)); animation:capParticleForward 1.8s linear infinite;}
+.cap-particle.p2{animation-delay:.60s;}.cap-particle.p3{animation-delay:1.20s;}
+.cap-particle.back{top:62%; left:auto; right:0; background:linear-gradient(270deg,transparent,rgba(192,212,144,.18),var(--success)); filter:drop-shadow(0 0 6px rgba(164,184,112,.62)); animation-name:capParticleBack;}
+.cap-particle.back.p2{animation-delay:.68s;}.cap-particle.back.p3{animation-delay:1.28s;}
+@keyframes capParticleForward{0%{left:0;opacity:0;}12%{opacity:1;}86%{opacity:1;}100%{left:100%;opacity:0;}}
+@keyframes capParticleBack{0%{right:0;opacity:0;}12%{opacity:1;}86%{opacity:1;}100%{right:100%;opacity:0;}}
+
+.model-shell{padding:max(52px,5vh) max(46px,3.6vw) max(22px,2vh); display:grid; grid-template-columns:1fr .36fr 1fr; gap:var(--sp-18); align-items:stretch;}
+.model-zone{position:relative; z-index:1; display:grid; grid-template-columns:auto 1fr; gap:var(--sp-18); align-items:center; min-width:0; border:1px solid rgba(255,255,255,.03); background:rgba(255,255,255,.01); border-radius:5px; padding:max(18px,2vh) max(24px,1.9vw);}
+.model-avatar{width:max(68px,7vh); aspect-ratio:1; display:flex; align-items:center; justify-content:center;}
+.model-core{position:relative; width:100%; height:100%; border:1px solid rgba(241,245,251,.08); border-radius:50%; background:#11151e; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 24px rgba(0,0,0,.24),0 0 20px rgba(92,170,255,.10);}
+.core-icon{color:rgba(241,245,251,.86); font-family:var(--font-mono); font-size:var(--fs-18); font-weight:300; letter-spacing:.16em;}
+.orbit-dot{display:none;}
+.orbit-dot.d1{display:block; position:absolute; width:9px; height:9px; right:2px; top:2px; border-radius:50%; background:rgba(241,245,251,.92); box-shadow:0 0 10px 2px rgba(241,245,251,.34);}
+.model-copy{display:flex; flex-direction:column; gap:var(--sp-10); min-width:0;}
+.model-name{font-family:var(--font-sans); font-size:var(--fs-20); font-weight:400; color:rgba(255,255,255,.96); line-height:1.18; letter-spacing:.03em;}
+.model-name span{color:var(--accent-blue);}
+.model-name + .model-features{padding-top:var(--sp-10); border-top:1px solid rgba(255,255,255,.03);}
+.model-features{display:flex; align-items:center; flex-wrap:wrap; gap:var(--sp-5) var(--sp-8); color:var(--ink-soft);}
+.feature{min-width:0; font-size:var(--fs-12); font-weight:400; color:rgba(255,255,255,.72); line-height:1.35;}
+.feature:not(:last-child)::after{content:'/'; margin-left:var(--sp-8); color:rgba(255,255,255,.24);}
+
+.model-loop{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--sp-8); min-height:0; background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.04); border-radius:5px; padding:var(--sp-12); overflow:visible;}
+.model-loop::before,.model-loop::after{position:absolute; top:50%; transform:translateY(-50%); font-family:var(--font-mono); font-size:var(--fs-24); line-height:1; color:rgba(255,255,255,.38); text-shadow:none; opacity:.62;}
+.model-loop::before{content:'⟵'; left:calc(var(--sp-32) * -1.1);}
+.model-loop::after{content:'⟶'; right:calc(var(--sp-32) * -1.1);}
+.cycle{position:relative; z-index:2; display:grid; grid-template-columns:1fr; gap:var(--sp-6); width:100%; padding:var(--sp-8) 0;}
+.cycle-step{font-family:var(--font-mono); font-size:var(--fs-10); color:var(--ink-soft); letter-spacing:.08em; background:rgba(8,11,17,.30); border-radius:999px; padding:var(--sp-6) var(--sp-8); text-align:center;}
+
+.appear{animation:slideUp .28s var(--ease) both;}
+@keyframes slideUp{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
+
+@media (max-width:900px){
+  html,body{overflow:auto;height:auto;}
+  .stage{position:relative; min-height:100dvh; height:auto; padding:0 18px 28px;}
+  .title-block{min-height:auto; padding:18px 0 14px;}
+  .board,.model-layer,.capability-layer,.app-layer{display:flex; flex-direction:column;}
+  .board{gap:24px;}
+  .panel{min-height:190px;}
+  .app-shell,.model-shell{grid-template-columns:1fr; padding:48px 18px 18px;}
+  .model-zone{grid-template-columns:1fr;}
+  .capability-shell{grid-template-columns:1fr; padding:48px 18px 18px;}
+  .cap-stream{min-height:58px;}
+  .model-features,.app-list,.cap-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<main id="cover" class="cover-page">
+  <section class="cover-shell">
+    <header class="cover-topline">
+      <a class="home-link cover-home cover-brand" href="#cover">ARCHE</a>
+      <div class="cover-meta">AUTONOMOUS CHEMISTRY DISCOVERY</div>
+    </header>
+
+    <section class="cover-hero">
+      <div class="cover-content">
+        <div class="cover-kicker">AI Reaction Mechanism Discovery</div>
+        <h1 class="cover-title"><strong>ARCHE</strong>颠覆化学反应机理发现范式</h1>
+        <div class="cover-subtitle">自主生成 · 验证 · 迭代优化</div>
+        <p class="cover-intro">
+          <em>ARCHE</em> 深度融合了通用推理模型、计算化学专家模型与专业计算化学工具，
+          实现了反应机理假设的自动生成、验证与迭代优化。ARCHE 的应用不仅推动了机理研究从
+          “专家依赖”迈向“自主发现”的新阶段，更为规模化的人工智能辅助化学研究奠定了坚实基础。
+        </p>
+      </div>
+    </section>
+
+    <footer class="cover-bottom">
+      <div class="cover-signal">
+        <span>Reasoning Model</span>
+        <span>Chemistry Expert</span>
+        <span>Computation Tools</span>
+      </div>
+      <a class="cover-entry" href="#detail" aria-label="进入详情页">
+        <span class="cover-entry-label">
+          <b>进入详情页</b>
+          <small>Open Architecture View</small>
+        </span>
+        <span class="cover-entry-arrow">›</span>
+      </a>
+    </footer>
+  </section>
+</main>
+
+<main id="detail" class="stage detail-page">
+  <header class="title-block appear">
+    <div>
+      <a class="home-link" href="#cover" aria-label="返回首页">
+        <h1 class="hd-title"><span class="hd-brand">ARCHE</span><em>颠覆化学反应机理发现范式</em></h1>
+      </a>
+    </div>
+  </header>
+
+  <section class="board">
+    <div class="app-layer">
+      <div class="module appear" style="animation-delay:.28s">
+        <article class="panel app-shell">
+          <h2 class="layer-badge">APP.LAYER // 应用层</h2>
+          <section class="app-zone mechanism-card">
+            <div class="app-copy">
+              <div class="app-head">
+                <svg class="ref-icon app-icon" viewBox="0 0 24 24">
+                  <circle cx="18" cy="6" r="2.5"></circle>
+                  <circle cx="6" cy="18" r="2.5"></circle>
+                  <circle cx="18" cy="18" r="2.5"></circle>
+                  <path d="M18 8.5v7"></path>
+                  <path d="M16 7.5l-8.5 9"></path>
+                  <path d="M5.5 5.5l1 1"></path>
+                  <path d="M8 8l1 1"></path>
+                </svg>
+                <h3 class="app-title">机理研究</h3>
+              </div>
+              <div class="app-list">
+                <span class="chip">不对称催化机理复现</span>
+                <span class="chip">双镍偶联反应动力学建模</span>
+                <span class="chip">蓝光诱导 B-P 偶联新自由基路径</span>
+                <span class="chip">Ni 催化迁移偶联选择性描述符</span>
+              </div>
+            </div>
+          </section>
+          <section class="app-zone production-card">
+            <div class="app-copy">
+              <div class="app-head">
+                <svg class="ref-icon app-icon" viewBox="0 0 24 24">
+                  <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+                  <path d="M8 5V2"></path>
+                  <path d="M16 5V2"></path>
+                  <path d="M8 22v-3"></path>
+                  <path d="M16 22v-3"></path>
+                  <path d="M5 8H2"></path>
+                  <path d="M5 16H2"></path>
+                  <path d="M22 8h-3"></path>
+                  <path d="M22 16h-3"></path>
+                  <circle cx="12" cy="12" r="1.5"></circle>
+                </svg>
+                <h3 class="app-title">稳定制备与可控制备</h3>
+              </div>
+              <div class="app-list">
+                <span class="chip">KrF 光刻胶树脂稳定制备</span>
+                <span class="chip">大面积单晶石墨可控制备</span>
+              </div>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+
+    <div class="capability-layer">
+      <div class="module appear" style="animation-delay:.16s">
+        <article class="panel capability-shell">
+          <h2 class="layer-badge">CAPABILITY.LAYER // 能力层</h2>
+          <section class="cap-zone">
+            <h3 class="cap-title">计算化学闭环<span>干实验能力</span></h3>
+            <div class="cap-grid">
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><path d="M8 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 0c2.5 0 4 1.5 4 4s1.5 4 4 4a4 4 0 1 0 0-8 4 4 0 0 0-4 4"></path></svg>逆合成</span>
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M12 11L3 6.5"></path><path d="M12 11l9-4.5"></path></svg>分子建模</span>
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><path d="M4 21v-7"></path><path d="M4 10V3"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M20 21v-5"></path><path d="M20 12V3"></path><path d="M2 14h4"></path><path d="M10 8h4"></path><path d="M18 16h4"></path></svg>实验条件推荐</span>
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>工具/软件调用</span>
+            </div>
+          </section>
+          <section class="cap-stream" aria-label="干实验指令进入互证引擎">
+            <span class="cap-particle"></span><span class="cap-particle p2"></span><span class="cap-particle p3"></span>
+            <span class="cap-particle back"></span><span class="cap-particle back p2"></span><span class="cap-particle back p3"></span>
+          </section>
+          <section class="cap-loop" aria-label="干湿融合双向互证">
+            <div class="cap-engine-core"><svg class="ref-icon" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"></path></svg></div>
+            <div class="cap-engine-title">干湿融合<span>双向互证</span></div>
+            <div class="cap-engine-steps">
+              <span class="cap-engine-step">计算指导实验</span>
+              <span class="cap-engine-step">实验修正计算</span>
+              <span class="cap-engine-step">联合结论输出</span>
+            </div>
+          </section>
+          <section class="cap-stream" aria-label="互证引擎调度湿实验并回传数据">
+            <span class="cap-particle"></span><span class="cap-particle p2"></span><span class="cap-particle p3"></span>
+            <span class="cap-particle back"></span><span class="cap-particle back p2"></span><span class="cap-particle back p3"></span>
+          </section>
+          <section class="cap-zone wet">
+            <h3 class="cap-title">实验自动化闭环<span>湿实验能力</span></h3>
+            <div class="cap-grid">
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M9 9h6v6H9z"></path><path d="M9 1V4"></path><path d="M15 1V4"></path><path d="M9 20v3"></path><path d="M15 20v3"></path><path d="M20 9h3"></path><path d="M20 14h3"></path><path d="M1 9h3"></path><path d="M1 14h3"></path></svg>设备自动控制</span>
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"></path></svg>数据采集</span>
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>实验异常处置</span>
+              <span class="cap-item"><svg class="ref-icon" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"></path></svg>数据支撑</span>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+
+    <div class="model-layer">
+      <div class="module appear" style="animation-delay:.04s">
+        <article class="panel model-shell">
+          <h2 class="layer-badge">MODEL.LAYER // 模型层</h2>
+          <section class="model-zone">
+            <div class="model-avatar" aria-label="InternS2 科学多模态模型示意">
+              <div class="model-core">
+                <span class="core-icon">S2</span>
+                <span class="orbit-dot d1"></span>
+                <span class="orbit-dot d2"></span>
+                <span class="orbit-dot d3"></span>
+              </div>
+            </div>
+            <div class="model-copy">
+              <h3 class="model-name"><span>InternS2</span> 科学多模态模型</h3>
+              <div class="model-features">
+                <span class="feature">跨模态统一表征</span>
+                <span class="feature">长程科学推理</span>
+                <span class="feature">强化学习与自我进化</span>
+              </div>
+            </div>
+          </section>
+          <section class="model-loop" aria-label="模型双向循环">
+            <div class="cycle">
+              <span class="cycle-step" style="--d:0s">推理</span>
+              <span class="cycle-step" style="--d:-3.2s">执行</span>
+              <span class="cycle-step" style="--d:-1.6s">反思</span>
+            </div>
+          </section>
+          <section class="model-zone">
+            <div class="model-avatar" aria-label="化学专家模式示意">
+              <div class="model-core">
+                <span class="core-icon">CX</span>
+                <span class="orbit-dot d1"></span>
+                <span class="orbit-dot d2"></span>
+                <span class="orbit-dot d3"></span>
+              </div>
+            </div>
+            <div class="model-copy">
+              <h3 class="model-name">化学<span>专家模式</span></h3>
+              <div class="model-features">
+                <span class="feature">化学领域知识</span>
+                <span class="feature">规律抽象归纳</span>
+                <span class="feature">机理迭代探索</span>
+              </div>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+
+  </section>
+</main>
+</body>
+</html>

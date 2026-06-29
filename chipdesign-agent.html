@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChipDesign Agent 颠覆芯片设计范式</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#f7fbff;--blue:#8dccff;--font-sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;--font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;--ease:cubic-bezier(.2,0,0,1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#070b12;}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.cover{position:fixed;inset:0;overflow:hidden;background:#070b12 url('assets/chipdesign-agent-cover-bg.png') center center / cover no-repeat;}
+.cover::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,8,13,.96) 0%,rgba(5,8,13,.82) 31%,rgba(5,8,13,.36) 62%,rgba(5,8,13,.10) 100%),radial-gradient(70% 85% at 24% 46%,rgba(92,170,255,.18),transparent 56%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 28%);}
+.cover::after{content:'';position:absolute;width:150%;height:280px;left:-34%;top:5%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),rgba(141,204,255,.12),transparent);filter:blur(118px);transform:rotate(-34deg);mix-blend-mode:screen;}
+.shell{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr auto;padding:max(28px,3.2vh) max(72px,5.2vw) max(48px,5vh);}
+.topline{display:flex;align-items:center;justify-content:space-between;font-family:var(--font-mono);font-size:max(12px,1.2vh);letter-spacing:.28em;text-transform:uppercase;color:rgba(247,251,255,.44);}
+.brand{font-size:max(22px,2.3vh);font-weight:600;letter-spacing:.18em;color:rgba(247,251,255,.94);}
+.meta{display:flex;align-items:center;gap:max(14px,1.2vw);}
+.meta::before{content:'//';color:rgba(247,251,255,.28);}
+.hero{display:flex;align-items:center;max-width:min(920px,52vw);}
+.content{transform:translateY(max(-36px,-3.6vh));}
+.kicker{display:inline-flex;align-items:center;gap:max(10px,.8vw);margin-bottom:max(24px,2.8vh);font-family:var(--font-mono);font-size:max(12px,1.22vh);letter-spacing:.22em;text-transform:uppercase;color:rgba(141,204,255,.82);}
+.kicker::before{display:none;}
+h1{max-width:900px;font-size:clamp(52px,5.8vw,104px);font-weight:300;line-height:1.04;letter-spacing:.02em;text-wrap:balance;text-shadow:0 0 34px rgba(92,170,255,.10);}
+h1 strong{display:block;font-family:var(--font-mono);font-size:.82em;font-weight:600;letter-spacing:.08em;color:var(--ink);}
+.subtitle{margin-top:max(18px,2vh);font-size:clamp(22px,2.15vw,38px);font-weight:300;line-height:1.2;color:rgba(247,251,255,.88);}
+.intro{margin-top:max(28px,3.1vh);max-width:780px;font-size:clamp(17px,1.25vw,24px);line-height:1.86;color:rgba(247,251,255,.78);letter-spacing:.025em;}
+.intro em{font-style:normal;color:rgba(141,204,255,.92);}
+.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;}
+.signal{display:grid;grid-template-columns:repeat(3,auto);gap:max(18px,1.5vw);color:rgba(247,251,255,.54);font-family:var(--font-mono);font-size:max(11px,1.08vh);letter-spacing:.14em;text-transform:uppercase;}
+.signal span{display:inline-flex;align-items:center;gap:10px;}
+.signal span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:0 0 14px rgba(141,204,255,.72);}
+@media (max-width:900px){html,body{overflow:auto;height:auto}.cover{position:relative;min-height:100dvh}.shell{min-height:100dvh;padding:24px 20px 28px;gap:32px}.topline{align-items:flex-start;gap:16px;flex-direction:column}.hero{max-width:100%;align-items:end}h1{font-size:clamp(42px,13vw,70px)}.intro{font-size:16px;line-height:1.72}.bottom{align-items:stretch;flex-direction:column}.signal{grid-template-columns:1fr;gap:10px}}
+</style>
+</head>
+<body>
+<main class="cover">
+  <section class="shell">
+    <header class="topline">
+      <div class="brand">CHIPDESIGN AGENT</div>
+      <div class="meta">LLM + EDA PARADIGM</div>
+    </header>
+    <section class="hero">
+      <div class="content">
+        <div class="kicker">Chip Design Intelligence</div>
+        <h1><strong>ChipDesign Agent</strong>颠覆芯片设计范式</h1>
+        <div class="subtitle">芯片设计智能体</div>
+        <p class="intro">
+          借助通专大模型 + 芯片设计智能体，构建自主探索发现最优芯片设计的环境；
+          以 <em>EDA</em> 作为干实验校验函数，打破芯片设计行业数据少、数据封闭瓶颈，
+          让大模型学会芯片设计基础理论，并进行最优设计探索。
+        </p>
+      </div>
+    </section>
+    <footer class="bottom">
+      <div class="signal">
+        <span>Foundation Model</span>
+        <span>Design Agent</span>
+        <span>EDA Verification</span>
+      </div>
+    </footer>
+  </section>
+</main>
+</body>
+</html>
