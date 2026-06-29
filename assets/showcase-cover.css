@@ -15,7 +15,11 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   position:fixed;
   inset:0;
   overflow:hidden;
-  background:#070b12 var(--cover-bg) center center / cover no-repeat;
+  background-color:#070b12;
+  background-image:var(--cover-bg);
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
 }
 .cover::before{
   content:'';
