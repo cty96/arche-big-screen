@@ -4,8 +4,8 @@ Static big-screen presentation pages for the ARCHE chemical reaction mechanism d
 
 ## Pages
 
-- `index.html` - ARCHE cover and architecture detail page
-- `chipdesign-agent.html` - preserved ChipDesign Agent cover page
+- `chipdesign-agent.html` - G1 芯片设计封面
+- `index.html` - G3 计算化学 / ARCHE cover and architecture detail page
 - `g2-retrosynthesis.html` - G2 AI 逆合成规划封面
 - `g4-brainomni.html` - G4 BrainOmni 脑机接口封面
 - `g5-earth-discovery.html` - G5 地球科学发现系统封面

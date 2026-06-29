@@ -38,7 +38,7 @@ body{font-family:var(--font-sans); color:var(--ink); background:var(--paper); fo
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}}
 
 .cover-page,.detail-page{transition:opacity .42s var(--ease),visibility .42s var(--ease);}
-.cover-page{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; background:#070b12 url('assets/arche-cover-bg.png') center center / cover no-repeat; opacity:1; visibility:visible; pointer-events:auto;}
+.cover-page{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; background:#070b12 url('assets/g3-computational-chemistry-cover-bg.png') center center / cover no-repeat; opacity:1; visibility:visible; pointer-events:auto;}
 .cover-page::before{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(5,8,13,.96) 0%,rgba(5,8,13,.82) 31%,rgba(5,8,13,.36) 62%,rgba(5,8,13,.10) 100%),radial-gradient(70% 85% at 24% 38%,rgba(92,170,255,.18),transparent 56%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 28%);}
 .cover-page::after{content:''; position:absolute; width:150%; height:280px; left:-34%; top:3%; pointer-events:none; background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),rgba(141,204,255,.12),transparent); filter:blur(118px); transform:rotate(-34deg); mix-blend-mode:screen;}
 .cover-shell{position:relative; z-index:1; height:100%; display:grid; grid-template-rows:auto 1fr auto; padding:max(28px,3.2vh) max(72px,5.2vw) max(48px,5vh);}
@@ -185,7 +185,7 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 <main id="cover" class="cover-page">
   <section class="cover-shell">
     <header class="cover-topline">
-      <a class="home-link cover-home cover-brand" href="#cover">ARCHE</a>
+      <a class="home-link cover-home cover-brand" href="#cover">G3 · 计算化学</a>
       <div class="cover-meta">AUTONOMOUS CHEMISTRY DISCOVERY</div>
     </header>
 
@@ -223,7 +223,7 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
   <header class="title-block appear">
     <div>
       <a class="home-link" href="#cover" aria-label="返回首页">
-        <h1 class="hd-title"><span class="hd-brand">ARCHE</span><em>颠覆化学反应机理发现范式</em></h1>
+        <h1 class="hd-title"><span class="hd-brand">G3 · 计算化学</span><em>颠覆化学反应机理发现范式</em></h1>
       </a>
     </div>
   </header>
