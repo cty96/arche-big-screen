@@ -6,6 +6,10 @@ Static big-screen presentation pages for the ARCHE chemical reaction mechanism d
 
 - `index.html` - ARCHE cover and architecture detail page
 - `chipdesign-agent.html` - preserved ChipDesign Agent cover page
+- `g2-retrosynthesis.html` - G2 AI 逆合成规划封面
+- `g4-brainomni.html` - G4 BrainOmni 脑机接口封面
+- `g5-earth-discovery.html` - G5 地球科学发现系统封面
+- `g6-materials-cardioagent.html` - G6 合金 / 类器官双内容切换封面
 
 ## Run Locally
 
@@ -14,4 +18,3 @@ Open `index.html` directly in a browser, or serve the folder with any static fil
 ```bash
 python3 -m http.server 8080
 ```
-
