@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChipDesign Agent 颠覆芯片设计范式</title>
+<title>AI+芯片设计：芯片设计智能体</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -94,14 +94,22 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   text-transform:uppercase;
   color:rgba(247,251,255,.44);
 }
+.cover-heading{
+  display:flex;
+  align-items:center;
+  min-width:0;
+}
 .brand{
-  font-family:var(--font-serif);
-  font-size:max(22px,2.3vh);
-  font-weight:400;
-  letter-spacing:0;
+  display:block;
+  font-family:var(--font-sans);
+  font-size:20px;
+  font-weight:500;
+  letter-spacing:.08em;
   color:rgba(247,251,255,.94);
   text-decoration:none;
   white-space:nowrap;
+  text-transform:none;
+  line-height:1;
 }
 .meta{display:flex;align-items:center;gap:max(14px,1.2vw);}
 .meta::before{content:'//';color:rgba(247,251,255,.28);}
@@ -198,7 +206,7 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   display:grid;
   place-items:center;
   border:1px solid rgba(255,255,255,.10);
-  color:var(--blue);
+  color:#fff;
   font-family:var(--font-mono);
   font-size:max(24px,2.5vh);
   line-height:1;
@@ -243,9 +251,9 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   align-items:center;
   gap:max(12px,1.2vw);
 }
-.hd-brand{font-size:max(24px,2.58vh);font-weight:400;color:rgba(241,245,251,.94);}
+.hd-brand{display:none;font-size:max(24px,2.58vh);font-weight:400;color:rgba(241,245,251,.94);}
 .hd-title em{font-style:normal;color:rgba(241,245,251,.62);}
-.hd-title em::before{content:'//';margin-right:max(12px,1.2vw);color:rgba(241,245,251,.34);}
+.hd-title em::before{display:none;content:'//';margin-right:max(12px,1.2vw);color:rgba(241,245,251,.34);}
 .detail-note{
   font-family:var(--font-mono);
   font-size:max(10px,1.05vh);
@@ -285,6 +293,7 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   gap:max(18px,2vh);
   padding:max(30px,3.2vh) max(28px,2.3vw);
 }
+.bottleneck-panel .panel-inner{gap:max(8px,.8vh);}
 .section-label{
   display:flex;
   align-items:center;
@@ -313,6 +322,62 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   grid-template-rows:repeat(3,1fr);
   gap:max(16px,1.7vh);
   list-style:none;
+}
+.bottleneck-visual{
+  position:relative;
+  min-height:max(128px,12.8vh);
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(141,204,255,.10);
+  border-radius:6px;
+  background:
+    linear-gradient(180deg,rgba(141,204,255,.055),rgba(141,204,255,.015)),
+    radial-gradient(70% 80% at 28% 42%,rgba(92,170,255,.16),transparent 62%),
+    radial-gradient(62% 74% at 74% 44%,rgba(241,169,78,.11),transparent 66%);
+  overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.bottleneck-visual::before{
+  content:'';
+  position:absolute;
+  left:8%;
+  right:8%;
+  bottom:0;
+  height:42%;
+  background:
+    linear-gradient(135deg,rgba(141,204,255,.18) 0 1px,transparent 1px 18px),
+    linear-gradient(45deg,rgba(255,255,255,.07) 0 1px,transparent 1px 18px);
+  opacity:.28;
+  transform:perspective(240px) rotateX(56deg);
+  transform-origin:bottom;
+}
+.bottleneck-svg{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100%;
+  min-height:max(128px,12.8vh);
+  display:block;
+}
+.visual-label{
+  font-family:var(--font-serif);
+  font-size:20px;
+  font-weight:600;
+  fill:var(--blue);
+}
+.visual-sub{
+  font-family:var(--font-serif);
+  font-size:15px;
+  fill:rgba(247,251,255,.72);
+}
+.visual-line{stroke:rgba(141,204,255,.76);stroke-width:2;stroke-dasharray:6 6;fill:none;}
+.bottleneck-panel .pain-list{
+  gap:max(7px,.7vh);
+}
+.bottleneck-panel .pain-list li{
+  line-height:1.36;
+  padding-top:max(7px,.72vh);
+  padding-bottom:max(7px,.72vh);
 }
 .pain-list li,.result-card{
   position:relative;
@@ -343,20 +408,25 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
 .flow-panel .panel-inner{padding:max(26px,2.8vh) max(30px,2.4vw);}
 .flow-title{
   display:flex;
-  align-items:baseline;
+  align-items:center;
   justify-content:space-between;
   gap:20px;
   padding-bottom:max(14px,1.5vh);
   border-bottom:1px solid rgba(255,255,255,.07);
 }
-.flow-title h2{
+.flow-title .section-label{
+  flex:0 0 auto;
+  padding-bottom:0;
+  border-bottom:0;
+}
+.flow-title h2:not(.section-label){
   font-family:var(--font-serif);
   font-size:max(21px,2.25vh);
   font-weight:400;
   color:rgba(255,255,255,.96);
   line-height:1.32;
 }
-.flow-title span{
+.flow-title > span{
   font-family:var(--font-mono);
   font-size:max(10px,1.05vh);
   color:rgba(141,204,255,.72);
@@ -368,44 +438,59 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   flex:1;
   min-height:0;
   display:grid;
-  grid-template-columns:.96fr 1fr 1fr 1fr .96fr;
-  grid-template-rows:1fr auto;
-  gap:max(10px,.85vw);
+  grid-template-columns:1fr;
+  grid-template-rows:auto auto minmax(270px,1fr) auto auto;
+  gap:max(8px,.8vh);
   align-items:stretch;
 }
-.input-node,.review-node,.process-node{grid-row:1;}
-.review-node{grid-column:5;}
+.input-node,.review-node,.cycle-zone{grid-column:1;}
+.input-node{grid-row:1;}
+.cycle-zone{grid-row:3;}
+.review-node{grid-row:5;}
 .input-node,.review-node{
   position:relative;
   z-index:1;
   border:1px solid rgba(141,204,255,.12);
   border-radius:6px;
   background:rgba(255,255,255,.025);
-  padding:max(16px,1.6vh) max(14px,1vw);
+  padding:max(10px,1vh) max(14px,1vw);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-  min-height:max(250px,25vh);
-  height:100%;
-  display:flex;
-  flex-direction:column;
+  min-height:0;
+  display:grid;
+  grid-template-columns:auto minmax(96px,.62fr) 1fr;
+  align-items:center;
+  column-gap:max(12px,1vw);
 }
+.input-node .person-mark{grid-column:1;grid-row:1 / 3;}
+.input-node .node-eyebrow{grid-column:2;grid-row:1;}
+.input-node h3{grid-column:2;grid-row:2;}
+.input-node .input-items{grid-column:3;grid-row:1 / 3;}
+.review-node{
+  grid-template-columns:auto minmax(118px,.56fr) 1fr;
+}
+.review-node .person-mark{grid-column:1;grid-row:1 / 3;}
+.review-node .node-eyebrow{grid-column:2;grid-row:1;}
+.review-node h3{grid-column:2;grid-row:2;}
+.review-node .review-items{grid-column:3;grid-row:1 / 3;}
 .node-eyebrow{
   font-family:var(--font-mono);
   font-size:max(10px,1.02vh);
   letter-spacing:.16em;
   color:rgba(141,204,255,.70);
   text-transform:uppercase;
-  margin-bottom:max(10px,1vh);
+  margin-bottom:max(4px,.4vh);
 }
 .input-node h3,.review-node h3{
   font-family:var(--font-serif);
   font-size:max(18px,1.8vh);
   font-weight:400;
   color:rgba(255,255,255,.94);
-  margin-bottom:max(12px,1.2vh);
+  margin-bottom:0;
 }
 .input-items,.review-items{
   display:grid;
-  gap:max(8px,.8vh);
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:max(8px,.8vh) max(12px,1vw);
   list-style:none;
   color:rgba(247,251,255,.72);
   font-size:max(12px,1.18vh);
@@ -420,11 +505,110 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   flex:0 0 auto;
   background:rgba(141,204,255,.85);
 }
-.process-node{
+.outer-flow-link{
+  position:relative;
+  z-index:4;
+  justify-self:center;
+  width:1px;
+  height:max(24px,2.4vh);
+  background:linear-gradient(180deg,rgba(141,204,255,.16),rgba(141,204,255,.72),rgba(141,204,255,.16));
+  pointer-events:none;
+}
+.outer-flow-link::before{
+  content:attr(data-label);
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  padding:5px 8px;
+  border:1px solid rgba(141,204,255,.16);
+  border-radius:999px;
+  color:rgba(141,204,255,.84);
+  background:rgba(10,17,27,.82);
+  box-shadow:0 0 18px rgba(141,204,255,.09),inset 0 1px 0 rgba(255,255,255,.04);
+  font-family:var(--font-serif);
+  font-size:max(11px,1.05vh);
+  line-height:1;
+  white-space:nowrap;
+}
+.outer-flow-link::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:-1px;
+  width:0;
+  height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:8px solid rgba(141,204,255,.78);
+  transform:translateX(-50%);
+  filter:drop-shadow(0 0 8px rgba(141,204,255,.32));
+}
+.outer-flow-link.input-to-cycle{grid-row:2;}
+.outer-flow-link.cycle-to-review{grid-row:4;}
+.cycle-zone{
   position:relative;
   z-index:1;
-  min-height:max(250px,25vh);
+  min-height:max(270px,27vh);
   height:100%;
+  border:1px solid rgba(241,169,78,.12);
+  border-radius:6px;
+  background:
+    radial-gradient(circle at 50% 52%,rgba(241,169,78,.12),rgba(141,204,255,.045) 44%,transparent 66%),
+    rgba(255,255,255,.018);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 16px 42px rgba(0,0,0,.22);
+  overflow:hidden;
+}
+.cycle-zone::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:56%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px dashed rgba(241,169,78,.34);
+  box-shadow:0 0 40px rgba(241,169,78,.10),inset 0 0 30px rgba(141,204,255,.05);
+}
+.cycle-zone::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:49%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(241,169,78,.11),rgba(241,169,78,.03) 42%,transparent 68%);
+}
+.cycle-core-label{
+  position:absolute;
+  z-index:4;
+  left:50%;
+  top:52%;
+  transform:translate(-50%,-50%);
+  min-width:112px;
+  min-height:44px;
+  padding:0 14px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(241,169,78,.22);
+  border-radius:999px;
+  font-family:var(--font-serif);
+  font-size:max(18px,1.85vh);
+  color:rgba(241,169,78,.95);
+  letter-spacing:.08em;
+  background:rgba(10,17,27,.78);
+  box-shadow:0 0 28px rgba(241,169,78,.16),inset 0 1px 0 rgba(255,255,255,.06);
+  text-shadow:0 0 18px rgba(241,169,78,.34);
+  pointer-events:none;
+}
+.process-node{
+  position:absolute;
+  z-index:3;
+  width:clamp(112px,30%,168px);
+  min-height:0;
   border:1px solid rgba(141,204,255,.13);
   border-radius:6px;
   background:rgba(10,17,27,.64);
@@ -433,43 +617,54 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   align-items:center;
   justify-content:flex-start;
   gap:max(12px,1.2vh);
-  padding:max(20px,2vh) max(12px,.9vw) max(16px,1.6vh);
+  padding:max(16px,1.55vh) max(12px,.9vw) max(14px,1.3vh);
   text-align:center;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 16px 40px rgba(0,0,0,.24);
 }
 .process-node::after{
   content:'';
   position:absolute;
-  right:calc(max(10px,.85vw) * -.72);
-  top:50%;
-  width:max(12px,1vw);
-  height:1px;
-  background:linear-gradient(90deg,rgba(141,204,255,.52),transparent);
+  inset:-2px;
+  border-radius:inherit;
+  border:1px solid transparent;
+  background:linear-gradient(135deg,rgba(141,204,255,.18),transparent 42%,rgba(241,169,78,.18)) border-box;
+  mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  pointer-events:none;
 }
-.process-node.verify::after{display:none;}
+.process-node.design{left:50%;top:8%;transform:translateX(-50%);}
+.process-node.verify{right:8%;bottom:8%;}
+.process-node.evolve{left:8%;bottom:8%;}
 .process-icon{
   width:max(52px,5.2vh);
   aspect-ratio:1;
   border-radius:50%;
   display:grid;
   place-items:center;
-  font-family:var(--font-mono);
-  font-size:max(18px,1.8vh);
-  color:var(--blue);
+  color:#fff;
   border:1px solid rgba(141,204,255,.20);
   background:radial-gradient(circle,rgba(141,204,255,.14),rgba(141,204,255,.03) 68%);
   flex:0 0 auto;
 }
+.process-icon svg{
+  width:54%;
+  height:54%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
 .process-node.evolve{
   border-color:rgba(241,169,78,.28);
-  background:radial-gradient(circle at 50% 45%,rgba(241,169,78,.13),rgba(10,17,27,.72) 64%);
+  background:rgba(10,17,27,.64);
   box-shadow:0 0 42px rgba(241,169,78,.10),inset 0 1px 0 rgba(255,255,255,.04);
 }
 .process-node.evolve .process-icon{
   color:#fff;
   border-color:rgba(241,169,78,.40);
-  background:linear-gradient(135deg,rgba(241,169,78,.90),rgba(205,130,42,.66));
-  box-shadow:0 0 30px rgba(241,169,78,.26);
+  background:radial-gradient(circle,rgba(241,169,78,.16),rgba(241,169,78,.04) 68%);
+  box-shadow:0 0 24px rgba(241,169,78,.18);
 }
 .process-node h3{
   font-family:var(--font-serif);
@@ -483,37 +678,48 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   font-size:max(11px,1.08vh);
   line-height:1.45;
 }
-.process-loop-note{
-  grid-column:2 / 5;
-  grid-row:2;
-  align-self:end;
-  justify-self:stretch;
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-  gap:max(10px,.8vw);
-  margin-top:max(8px,.8vh);
-  color:rgba(241,169,78,.80);
-  font-family:var(--font-serif);
-  font-size:max(13px,1.28vh);
-  letter-spacing:.08em;
-  white-space:nowrap;
+.cycle-arrow{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:52%;
+  width:56%;
+  aspect-ratio:1;
+  border-radius:50%;
   pointer-events:none;
 }
-.process-loop-note::before,.process-loop-note::after{
+.cycle-arrow::before{
   content:'';
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(241,169,78,.45));
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:rgba(241,169,78,.72);
+  filter:drop-shadow(0 0 8px rgba(241,169,78,.28));
 }
-.process-loop-note::after{background:linear-gradient(90deg,rgba(241,169,78,.45),transparent);}
+.cycle-arrow::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:-3px;
+  width:0;
+  height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:10px solid rgba(241,169,78,.88);
+  transform:translateX(-50%) rotate(44deg);
+}
+.cycle-arrow.to-verify{transform:translate(-50%,-50%) rotate(46deg);}
+.cycle-arrow.to-evolve{transform:translate(-50%,-50%) rotate(166deg);}
+.cycle-arrow.to-design{transform:translate(-50%,-50%) rotate(286deg);}
 .person-mark{
-  width:max(48px,4.8vh);
+  width:max(40px,4vh);
   aspect-ratio:1;
   border-radius:50%;
   display:grid;
   place-items:center;
-  margin-bottom:max(12px,1.2vh);
-  color:var(--blue);
+  margin-bottom:0;
+  color:#fff;
   border:1px solid rgba(141,204,255,.20);
   background:radial-gradient(circle,rgba(141,204,255,.14),rgba(141,204,255,.03) 68%);
 }
@@ -602,11 +808,35 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   background:rgba(141,204,255,.035);
 }
 .result-card h3{
+  display:flex;
+  align-items:center;
+  gap:max(10px,.8vw);
   font-family:var(--font-serif);
   font-size:max(18px,1.85vh);
   font-weight:400;
   color:rgba(255,255,255,.94);
   margin-bottom:max(8px,.8vh);
+}
+.result-icon{
+  width:max(34px,3.3vh);
+  aspect-ratio:1;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  color:#fff;
+  border:1px solid rgba(141,204,255,.20);
+  background:radial-gradient(circle,rgba(141,204,255,.15),rgba(141,204,255,.035) 68%);
+  box-shadow:0 0 22px rgba(141,204,255,.14);
+}
+.result-icon svg{
+  width:58%;
+  height:58%;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 .result-card p{color:rgba(247,251,255,.76);}
 .appear{animation:slideUp .28s var(--ease) both;}
@@ -617,6 +847,7 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   .cover,.stage{position:relative;left:auto;top:auto;width:100%;height:auto;min-height:100dvh;aspect-ratio:auto;transform:none;}
   .shell{min-height:100dvh;padding:24px 20px 28px;gap:32px;}
   .topline,.bottom,.title-block{align-items:flex-start;gap:16px;flex-direction:column;}
+  .brand{font-size:20px;white-space:normal;}
   .hero{max-width:100%;align-items:end;}
   .content{transform:none;}
   .cover-title{font-size:clamp(42px,13vw,70px);}
@@ -625,7 +856,29 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   .stage{padding:20px 18px 28px;}
   .g1-board,.agent-map{grid-template-columns:1fr;}
   .panel{min-height:260px;}
+  .review-node{grid-column:1;}
+  .cycle-zone{grid-column:1;min-height:430px;}
+  .outer-flow-link{display:none;}
+  .process-node{width:min(34%,170px);}
   .orbit{width:min(100%,420px);}
+}
+@media (min-width:901px) and (max-width:1400px){
+  .agent-map{grid-template-columns:1fr;grid-template-rows:auto auto minmax(250px,1fr) auto auto;}
+  .bottleneck-visual,.bottleneck-svg{min-height:max(118px,11.8vh);}
+  .outer-flow-link::before{font-size:10px;padding:4px 7px;}
+  .input-node,.review-node{padding:max(14px,1.4vh) max(12px,.8vw);}
+  .cycle-zone::before,.cycle-arrow{width:54%;}
+  .cycle-core-label{font-size:16px;min-width:82px;}
+  .process-node{
+    width:clamp(104px,29%,132px);
+    gap:8px;
+    padding:12px 9px 11px;
+  }
+  .process-node.design{top:6%;}
+  .process-node.verify,.process-node.evolve{bottom:5%;}
+  .process-icon{width:42px;}
+  .process-node h3{font-size:16px;line-height:1.18;}
+  .process-node p{font-size:10px;line-height:1.34;}
 }
 </style>
 </head>
@@ -633,14 +886,16 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
 <main id="cover" class="cover cover-page">
   <section class="shell">
     <header class="topline">
-      <a class="brand" href="#cover">G1 · 芯片设计</a>
+      <div class="cover-heading">
+        <a class="brand" href="#cover">AI+芯片设计</a>
+      </div>
       <div class="meta">LLM + EDA PARADIGM</div>
     </header>
     <section class="hero">
       <div class="content">
         <div class="kicker">Chip Design Intelligence</div>
         <h1 class="cover-title"><strong>ChipDesign Agent</strong></h1>
-        <div class="subtitle">颠覆芯片设计范式</div>
+        <div class="subtitle">在可验证环境中自我进化的芯片设计智能体</div>
         <p class="intro">
           借助通专大模型 + 芯片设计智能体，构建自主探索发现最优芯片设计的环境；
           以 <em>EDA</em> 作为干实验校验函数，打破芯片设计行业数据少、数据封闭瓶颈，
@@ -674,9 +929,25 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
   </header>
 
   <section class="g1-board">
-    <article class="panel appear">
+    <article class="panel bottleneck-panel appear">
       <div class="panel-inner">
         <h2 class="section-label"><span class="section-index">1</span>行业发展瓶颈</h2>
+        <div class="bottleneck-visual" aria-label="AI 以周为单位进化，芯片设计需要 24 个月">
+          <svg class="bottleneck-svg" viewBox="0 0 360 180" role="img" aria-hidden="true">
+            <defs>
+              <marker id="arrowHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(141,204,255,.82)"></path>
+              </marker>
+            </defs>
+            <circle cx="84" cy="90" r="25" fill="rgba(141,204,255,.10)" stroke="rgba(141,204,255,.58)"></circle>
+            <text x="84" y="97" text-anchor="middle" class="visual-label">周</text>
+            <circle cx="278" cy="90" r="28" fill="rgba(141,204,255,.10)" stroke="rgba(141,204,255,.58)"></circle>
+            <text x="278" y="86" text-anchor="middle" class="visual-label">24</text>
+            <text x="278" y="106" text-anchor="middle" class="visual-sub">个月</text>
+
+            <path class="visual-line" d="M130 90 H226" marker-start="url(#arrowHead)" marker-end="url(#arrowHead)"></path>
+          </svg>
+        </div>
         <ul class="pain-list">
           <li>AI 以“周”为单位进化，芯片设计却常常需要两年完成一轮迭代。</li>
           <li>设计链条长、环节多，高度依赖稀缺工程师，中国相关人才缺口超过 <span class="metric">30 万</span>。</li>
@@ -688,7 +959,7 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
     <article class="panel flow-panel appear">
       <div class="panel-inner">
         <div class="flow-title">
-          <h2>通专融合大模型 + InternBootCamp 可交互验证环境</h2>
+          <h2 class="section-label"><span class="section-index">2</span>核心能力</h2>
           <span>Human Input · Agent Design · EDA Verify</span>
         </div>
 
@@ -706,27 +977,46 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
             </ul>
           </div>
 
-          <div class="process-node design">
-            <div class="process-icon">01</div>
-            <h3>生成设计方案</h3>
-            <p>通专融合大模型将需求转为可执行芯片设计候选。</p>
+          <span class="outer-flow-link input-to-cycle" data-label="需求与约束输入" aria-hidden="true"></span>
+
+          <div class="cycle-zone" aria-label="自主进化闭环：生成设计方案、多级仿真校验、反馈迭代优化">
+            <span class="cycle-arrow to-verify" aria-hidden="true"></span>
+            <span class="cycle-arrow to-evolve" aria-hidden="true"></span>
+            <span class="cycle-arrow to-design" aria-hidden="true"></span>
+            <div class="cycle-core-label">自主进化</div>
+
+            <div class="process-node design">
+              <div class="process-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"></rect><path d="M9 9h6v6H9z"></path><path d="M9 2v4"></path><path d="M15 2v4"></path><path d="M9 18v4"></path><path d="M15 18v4"></path><path d="M2 9h4"></path><path d="M2 15h4"></path><path d="M18 9h4"></path><path d="M18 15h4"></path></svg>
+              </div>
+              <h3>生成设计方案</h3>
+              <p>通专融合大模型将需求转为可执行芯片设计候选。</p>
+            </div>
+
+            <div class="process-node verify">
+              <div class="process-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 4h7l3 3v13H7z"></path><path d="M14 4v4h4"></path><path d="M9 14l2 2 4-5"></path></svg>
+              </div>
+              <h3>多级仿真校验</h3>
+              <p>用可交互验证环境进行性能、功耗与布局校验。</p>
+            </div>
+
+            <div class="process-node evolve">
+              <div class="process-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 4v5h5"></path><path d="M20 20v-5h-5"></path><path d="M5.6 14.5A7 7 0 0 0 17.7 18"></path><path d="M18.4 9.5A7 7 0 0 0 6.3 6"></path></svg>
+              </div>
+              <h3>反馈迭代优化</h3>
+              <p>基于校验结果回流约束与经验，持续修正设计候选。</p>
+            </div>
+
           </div>
 
-          <div class="process-node evolve">
-            <div class="process-icon">AI</div>
-            <h3>自主进化</h3>
-            <p>在验证环境中持续学习反馈，避免只做分段最优。</p>
-          </div>
-
-          <div class="process-node verify">
-            <div class="process-icon">EDA</div>
-            <h3>多级仿真校验</h3>
-            <p>用可交互验证环境进行性能、功耗与布局校验。</p>
-          </div>
-
-          <div class="process-loop-note">校验反馈 → 设计生成 · 持续迭代闭环</div>
+          <span class="outer-flow-link cycle-to-review" data-label="可审方案输出" aria-hidden="true"></span>
 
           <div class="review-node">
+            <div class="person-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+            </div>
             <div class="node-eyebrow">Engineering Gate</div>
             <h3>工程师审核</h3>
             <ul class="review-items">
@@ -750,15 +1040,15 @@ body:has(#detail:target) .detail-page{opacity:1;visibility:visible;pointer-event
         <h2 class="section-label"><span class="section-index">3</span>成果</h2>
         <div class="result-list">
           <section class="result-card">
-            <h3>参数调整 Sizing</h3>
+            <h3><span class="result-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M4 17h16"></path><circle cx="9" cy="7" r="2.5"></circle><circle cx="15" cy="17" r="2.5"></circle></svg></span>参数调整 Sizing</h3>
             <p>较传统 AI 辅助工具，性能提升 <span class="metric">10-20%</span>，效率提升 <span class="metric">5-10 倍</span>。</p>
           </section>
           <section class="result-card">
-            <h3>布线排版 Layout</h3>
+            <h3><span class="result-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 6h6v5H5z"></path><path d="M13 13h6v5h-6z"></path><path d="M11 8h3a3 3 0 0 1 3 3v2"></path><path d="M13 16h-3a3 3 0 0 1-3-3v-2"></path></svg></span>布线排版 Layout</h3>
             <p>达到人类工程师水平，任务耗时缩短 <span class="metric">50% 以上</span>。</p>
           </section>
           <section class="result-card">
-            <h3>可解释可落地</h3>
+            <h3><span class="result-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h7l3 3v13H7z"></path><path d="M14 4v4h4"></path><path d="M9 14l2 2 4-5"></path></svg></span>可解释可落地</h3>
             <p>过程可查，携手龙头企业优化 <span class="metric">14nm / 7nm</span> 先进制程芯片性能。</p>
           </section>
         </div>

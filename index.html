@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARCHE：颠覆化学反应机理发现范式</title>
+<title>AI+化学智能：ARCHE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -43,8 +43,9 @@ body{font-family:var(--font-sans); color:var(--ink); background:var(--paper); fo
 .cover-page::before{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg,rgba(3,6,12,.86) 0%,rgba(3,6,12,.36) 34%,rgba(3,6,12,0) 68%),linear-gradient(90deg,rgba(4,8,15,.99) 0%,rgba(4,8,15,.92) 30%,rgba(4,8,15,.46) 56%,rgba(4,8,15,.04) 78%),linear-gradient(90deg,rgba(5,8,13,.70) 0%,rgba(5,8,13,.28) 38%,rgba(5,8,13,0) 70%),radial-gradient(70% 85% at 24% 38%,rgba(92,170,255,.18),transparent 56%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 28%);}
 .cover-page::after{content:''; position:absolute; width:150%; height:280px; left:-34%; top:3%; pointer-events:none; background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),rgba(141,204,255,.12),transparent); filter:blur(118px); transform:rotate(-34deg); mix-blend-mode:screen;}
 .cover-shell{position:relative; z-index:1; height:100%; display:grid; grid-template-rows:auto 1fr auto; padding:max(28px,3.2vh) max(72px,5.2vw) max(48px,5vh);}
-.cover-topline{display:flex; align-items:center; justify-content:space-between; font-family:var(--font-mono); font-size:max(12px,1.2vh); letter-spacing:.28em; text-transform:uppercase; color:rgba(247,251,255,.44);}
-.cover-brand{font-family:var(--font-serif); font-size:max(22px,2.3vh); font-weight:400; letter-spacing:0;}
+.cover-topline{display:flex; align-items:center; justify-content:space-between; gap:24px; font-family:var(--font-mono); font-size:max(12px,1.2vh); letter-spacing:.28em; text-transform:uppercase; color:rgba(247,251,255,.44);}
+.cover-heading{display:flex; align-items:center; min-width:0;}
+.cover-brand{display:block; font-family:var(--font-sans); font-size:20px; font-weight:500; letter-spacing:.08em; text-transform:none; white-space:nowrap; line-height:1;}
 .cover-topline .cover-brand{color:rgba(247,251,255,.94);}
 .cover-meta{display:flex; align-items:center; gap:max(14px,1.2vw);}
 .cover-meta::before{content:'//'; color:rgba(247,251,255,.28);}
@@ -83,9 +84,9 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 
 .title-block{display:flex; align-items:flex-start; min-height:auto; padding:0 0 max(22px,2.5vh);}
 .hd-title{font-family:var(--font-serif); font-size:var(--fs-11); font-weight:400; color:rgba(241,245,251,.62); line-height:1; letter-spacing:0; display:flex; align-items:center; gap:var(--sp-14); text-transform:none;}
-.hd-brand{font-size:var(--fs-20); font-weight:400; color:rgba(241,245,251,.94); letter-spacing:0; text-shadow:none;}
+.hd-brand{display:none; font-size:var(--fs-20); font-weight:400; color:rgba(241,245,251,.94); letter-spacing:0; text-shadow:none;}
 .hd-title em{font-style:normal; color:rgba(241,245,251,.62);}
-.hd-title em::before{content:'//'; margin-right:var(--sp-14); color:rgba(241,245,251,.34);}
+.hd-title em::before{display:none; content:'//'; margin-right:var(--sp-14); color:rgba(241,245,251,.34);}
 
 .board{display:grid; grid-template-columns:1fr 1.03fr 1fr; grid-template-rows:1.20fr .88fr .90fr; gap:max(24px,2.8vh); min-height:0;}
 .module{position:relative; min-width:0; min-height:0; display:flex; flex-direction:column;}
@@ -110,14 +111,14 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 .app-zone + .app-zone{box-shadow:none;}
 .app-copy{position:relative; z-index:2; display:flex; flex-direction:column; gap:var(--sp-10); min-width:0;}
 .app-head{display:flex; align-items:center; gap:var(--sp-14); padding-bottom:var(--sp-16); border-bottom:1px solid rgba(255,255,255,.08);}
-.app-title{font-family:var(--font-sans); font-size:var(--fs-20); font-weight:400; color:rgba(255,255,255,.96); letter-spacing:.04em;}
+.app-title{font-family:var(--font-serif); font-size:var(--fs-20); font-weight:400; color:rgba(255,255,255,.96); letter-spacing:.04em;}
 .app-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-8) var(--sp-14);}
 .chip{position:relative; font-size:var(--fs-12); font-weight:400; color:rgba(255,255,255,.76); padding:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:.03em;}
 .chip::before{content:''; display:inline-block; width:4px; height:4px; margin-right:var(--sp-8); border-radius:50%; background:rgba(255,255,255,.28); vertical-align:middle;}
 
 .capability-shell{padding:max(50px,4.8vh) max(38px,3vw) max(18px,1.8vh); display:grid; grid-template-columns:1fr clamp(78px,7.5vw,140px) clamp(220px,15vw,300px) clamp(78px,7.5vw,140px) 1fr; gap:var(--sp-18); align-items:stretch;}
 .cap-zone{position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; gap:var(--sp-14); min-width:0; border:1px solid rgba(255,255,255,.03); background:rgba(255,255,255,.01); border-radius:5px; padding:max(16px,1.7vh) max(22px,1.7vw);}
-.cap-title{display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:var(--sp-12); font-family:var(--font-sans); font-size:var(--fs-18); font-weight:400; color:rgba(255,255,255,.94); line-height:1.15; letter-spacing:.04em; padding-bottom:var(--sp-12); border-bottom:1px solid rgba(255,255,255,.05);}
+.cap-title{display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:var(--sp-12); font-family:var(--font-serif); font-size:var(--fs-18); font-weight:400; color:rgba(255,255,255,.94); line-height:1.15; letter-spacing:.04em; padding-bottom:var(--sp-12); border-bottom:1px solid rgba(255,255,255,.05);}
 .cap-title span{flex-shrink:0; font-size:var(--fs-10); font-weight:400; color:rgba(255,255,255,.78); letter-spacing:.14em; border:1px solid rgba(255,255,255,.09); border-radius:999px; padding:var(--sp-4) var(--sp-8); background:rgba(255,255,255,.035);}
 .cap-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-8);}
 .cap-item{position:relative; display:flex; align-items:center; gap:var(--sp-10); min-width:0; color:rgba(255,255,255,.78); font-size:var(--fs-12); font-weight:400; background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.03); border-radius:5px; padding:var(--sp-8) var(--sp-12);}
@@ -127,7 +128,7 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 .cap-loop>*{position:relative; z-index:1;}
 .cap-engine-core{position:relative; width:clamp(44px,4.8vh,68px); height:clamp(44px,4.8vh,68px); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--accent-blue); background:#11151e; font-family:var(--font-mono); font-size:var(--fs-16); border:1px solid rgba(141,204,255,.14); box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 20px rgba(92,170,255,.14);}
 .cap-engine-core .ref-icon{font-size:var(--fs-24); color:rgba(241,245,251,.90);}
-.cap-engine-title{font-family:var(--font-sans); font-size:var(--fs-18); font-weight:400; color:rgba(255,255,255,.95); line-height:1.16; text-align:center; white-space:nowrap; width:100%; padding-bottom:var(--sp-8); border-bottom:1px solid rgba(255,255,255,.06);}
+.cap-engine-title{font-family:var(--font-serif); font-size:var(--fs-18); font-weight:400; color:rgba(255,255,255,.95); line-height:1.16; text-align:center; white-space:nowrap; width:100%; padding-bottom:var(--sp-8); border-bottom:1px solid rgba(255,255,255,.06);}
 .cap-engine-title span{color:var(--accent-blue);}
 .cap-engine-steps{display:grid; gap:0; width:100%; margin-top:var(--sp-2); padding:0 var(--sp-4); background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.04); border-radius:5px;}
 .cap-engine-step{position:relative; font-size:var(--fs-10); color:rgba(255,255,255,.76); font-weight:400; line-height:1.25; text-align:center; padding:var(--sp-6) var(--sp-8); border-radius:0; background:transparent;}
@@ -151,7 +152,7 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 .orbit-dot{display:none;}
 .orbit-dot.d1{display:block; position:absolute; width:9px; height:9px; right:2px; top:2px; border-radius:50%; background:rgba(241,245,251,.92); box-shadow:0 0 10px 2px rgba(241,245,251,.34);}
 .model-copy{display:flex; flex-direction:column; gap:var(--sp-10); min-width:0;}
-.model-name{font-family:var(--font-sans); font-size:var(--fs-20); font-weight:400; color:rgba(255,255,255,.96); line-height:1.18; letter-spacing:.03em;}
+.model-name{font-family:var(--font-serif); font-size:var(--fs-20); font-weight:400; color:rgba(255,255,255,.96); line-height:1.18; letter-spacing:.03em;}
 .model-name span{color:var(--accent-blue);}
 .model-name + .model-features{padding-top:var(--sp-10); border-top:1px solid rgba(255,255,255,.03);}
 .model-features{display:flex; align-items:center; flex-wrap:wrap; gap:var(--sp-5) var(--sp-8); color:var(--ink-soft);}
@@ -171,6 +172,11 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 @media (max-width:900px){
   html,body{overflow:auto;height:auto;}
   .cover-page{left:auto;top:auto;width:100%;height:auto;min-height:100dvh;aspect-ratio:auto;transform:none;}
+  .cover-shell{min-height:100dvh;padding:24px 20px 28px;gap:30px;}
+  .cover-topline{align-items:flex-start;flex-direction:column;}
+  .cover-brand{font-size:20px;white-space:normal;}
+  .cover-hero{max-width:100%;align-items:end;}
+  .cover-content{transform:none;}
   .stage{position:relative; left:auto; top:auto; width:100%; min-height:100dvh; height:auto; aspect-ratio:auto; transform:none; padding:0 18px 28px;}
   .title-block{min-height:auto; padding:18px 0 14px;}
   .board,.model-layer,.capability-layer,.app-layer{display:flex; flex-direction:column;}
@@ -188,15 +194,17 @@ body:has(#detail:target) .detail-page{opacity:1; visibility:visible; pointer-eve
 <main id="cover" class="cover-page">
   <section class="cover-shell">
     <header class="cover-topline">
-      <a class="home-link cover-home cover-brand" href="#cover">G3 · 计算化学</a>
+      <div class="cover-heading">
+        <a class="home-link cover-home cover-brand" href="#cover">AI+化学智能</a>
+      </div>
       <div class="cover-meta">AUTONOMOUS CHEMISTRY DISCOVERY</div>
     </header>
 
     <section class="cover-hero">
       <div class="cover-content">
         <div class="cover-kicker">AI Reaction Mechanism Discovery</div>
-        <h1 class="cover-title"><strong>ARCHE</strong>颠覆化学反应机理发现范式</h1>
-        <div class="cover-subtitle">自主生成 · 验证 · 迭代优化</div>
+        <h1 class="cover-title"><strong>ARCHE</strong></h1>
+        <div class="cover-subtitle">化学反应机理发现新范式</div>
         <p class="cover-intro">
           <em>ARCHE</em> 深度融合了通用推理模型、计算化学专家模型与专业计算化学工具，
           实现了反应机理假设的自动生成、验证与迭代优化。ARCHE 的应用不仅推动了机理研究从
