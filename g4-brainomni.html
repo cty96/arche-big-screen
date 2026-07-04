@@ -3,27 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI+疾病诊断：BrainOmni</title>
+<title>AI+脑机接口：BrainOmni</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/showcase-cover.css">
-<style>.cover{background-image:url('assets/g4-brainomni-cover-bg.png');}</style>
+<style>
+.cover{
+  background-image:url('assets/g4-brainomni-cover-bg.png');
+  --cover-glow-primary:rgba(142,118,255,.20);
+  --cover-glow-secondary:rgba(104,209,255,.13);
+  --cover-glow-warm:rgba(255,255,255,.07);
+  --cover-glow-hotspot:rgba(232,226,255,.15);
+  --cover-glow-primary-at:24% 44%;
+  --cover-glow-secondary-at:72% 36%;
+  --cover-glow-warm-at:48% 84%;
+  --cover-beam-top:6%;
+  --cover-beam-rotate:-36deg;
+}
+</style>
 </head>
 <body>
 <main class="cover">
   <section class="shell">
     <header class="topline">
-      <div class="cover-heading">
-        <div class="brand">AI+疾病诊断</div>
-      </div>
       <div class="meta">BRAINOMNI FOUNDATION MODEL</div>
     </header>
     <section class="hero">
       <div class="content">
-        <div class="kicker">Unified EEG & MEG Modeling</div>
-        <h1><strong>BrainOmni</strong></h1>
-        <div class="subtitle">全球首个统一脑电与脑磁的大脑基础模型</div>
+        <h1><strong>AI+脑机接口</strong></h1>
+        <div class="subtitle">BrainOmni 全球首个统一脑电与脑磁的大脑基础模型</div>
         <p class="intro">通过模拟脑科学中源重构算法的前向过程，并显式建模传感器的真实物理属性，实现跨设备、跨模态、跨任务、跨被试的统一建模。通过大规模自监督预训练，<em>BrainOmni</em> 在多种下游任务表现优越。工作配套提出 BrainTokenizer，把连续的脑活动压缩并量化为离散神经词元，为大规模“脑信号语言建模”奠定基础。</p>
       </div>
     </section>
