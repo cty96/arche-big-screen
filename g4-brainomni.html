@@ -7,38 +7,842 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/showcase-cover.css">
 <style>
-.cover{
-  background-image:url('assets/g4-brainomni-cover-bg.png');
-  --cover-glow-primary:rgba(142,118,255,.20);
-  --cover-glow-secondary:rgba(104,209,255,.13);
-  --cover-glow-warm:rgba(255,255,255,.07);
-  --cover-glow-hotspot:rgba(232,226,255,.15);
-  --cover-glow-primary-at:24% 44%;
-  --cover-glow-secondary-at:72% 36%;
-  --cover-glow-warm-at:48% 84%;
-  --cover-beam-top:6%;
-  --cover-beam-rotate:-36deg;
+:root{
+  --ink:#f7fbff;
+  --ink-soft:rgba(247,251,255,.74);
+  --ink-mute:rgba(247,251,255,.50);
+  --paper:#070E1C;
+  --panel:rgba(12,21,34,.66);
+  --panel-strong:rgba(13,28,48,.74);
+  --rule:rgba(141,204,255,.105);
+  --rule-soft:rgba(255,255,255,.075);
+  --accent-blue:#8dccff;
+  --blue:#8dccff;
+  --violet:#5caaff;
+  --font-sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+  --font-serif:'Songti SC','STSong','Noto Serif SC','Source Han Serif SC','SimSun',serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.page{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:
+    radial-gradient(72% 88% at 50% 42%,rgba(92,170,255,.10),transparent 62%),
+    radial-gradient(40% 56% at 84% 36%,rgba(142,118,255,.075),transparent 64%),
+    linear-gradient(135deg,rgba(13,70,139,.22),transparent 30%),
+    linear-gradient(180deg,rgba(255,255,255,.018),transparent 28%,rgba(0,0,0,.18)),
+    #070E1C;
+}
+.page::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.011) 1px,transparent 1px),
+    linear-gradient(135deg,transparent 0 18%,rgba(25,102,198,.10) 18% 31%,transparent 31%),
+    linear-gradient(315deg,transparent 0 12%,rgba(24,86,171,.10) 12% 25%,transparent 25%);
+  background-size:72px 72px,72px 72px,100% 100%,100% 100%;
+  mask-image:radial-gradient(circle at 50% 46%,black,transparent 78%);
+  pointer-events:none;
+}
+.page::after{
+  content:'';
+  position:absolute;
+  width:150%;
+  height:260px;
+  left:-28%;
+  top:4%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),rgba(141,204,255,.08),transparent);
+  filter:blur(120px);
+  transform:rotate(-34deg);
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.shell{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:grid;
+  grid-template-rows:auto auto auto 1fr;
+  gap:min(1.55vh,16px);
+  padding:min(2.7vh,30px) min(4.3vw,84px) min(2.6vh,30px);
+}
+.masthead{
+  display:flex;
+  align-items:start;
+  justify-content:flex-start;
+  gap:28px;
+}
+.title-wrap{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:min(.9vh,10px);
+}
+.mark-wrap{
+  display:flex;
+  justify-content:flex-start;
+  min-width:max-content;
+}
+.page-mark{
+  display:inline-flex;
+  align-items:center;
+  min-height:clamp(24px,2.2vw,36px);
+  color:rgba(141,204,255,.68);
+  font-family:var(--font-sans);
+  font-size:clamp(13px,1.08vw,18px);
+  font-weight:500;
+  line-height:1;
+  letter-spacing:.06em;
+  white-space:nowrap;
+  text-shadow:0 0 18px rgba(92,170,255,.10);
+}
+.main-title{
+  margin-top:min(.4vh,6px);
+  text-align:center;
+}
+.main-title h2{
+  font-family:var(--font-sans);
+  font-size:clamp(34px,2.9vw,50px);
+  font-weight:600;
+  line-height:1.12;
+  letter-spacing:0;
+  color:rgba(247,251,255,.96);
+  text-shadow:0 0 28px rgba(141,204,255,.18);
+}
+.main-title p{
+  margin-top:min(.9vh,10px);
+  max-width:none;
+  margin-left:auto;
+  margin-right:auto;
+  color:rgba(141,204,255,.74);
+  font-size:clamp(13px,1.03vw,18px);
+  line-height:1.45;
+  white-space:nowrap;
+}
+.logo-strip{
+  position:relative;
+  width:100%;
+  min-height:clamp(66px,8.8vh,78px);
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:min(3.2vw,56px);
+  padding:clamp(12px,1.45vh,16px) min(2vw,32px);
+  border:1px solid rgba(141,204,255,.10);
+  border-radius:8px;
+  background:
+    linear-gradient(90deg,transparent,rgba(141,204,255,.035),transparent),
+    linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012)),
+    rgba(8,18,32,.38);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 16px 44px rgba(0,0,0,.18);
+  backdrop-filter:blur(12px);
+}
+.logo-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.logo-item + .logo-item::before{
+  content:'';
+  position:absolute;
+  left:calc(min(3.2vw,56px) / -2);
+  top:50%;
+  width:1px;
+  height:clamp(24px,3.5vh,34px);
+  background:rgba(247,251,255,.22);
+  transform:translateY(-50%);
+}
+.logo-item img{
+  display:block;
+  width:auto;
+  max-width:min(15vw,240px);
+  object-fit:contain;
+  opacity:.90;
+  filter:drop-shadow(0 0 16px rgba(141,204,255,.14));
+}
+.logo-pujiang{height:clamp(22px,2.8vh,34px);}
+.logo-tsinghua{height:clamp(24px,3.2vh,38px);}
+.logo-cambridge{height:clamp(23px,3.05vh,36px);}
+.board{
+  min-height:0;
+  display:grid;
+  grid-template-columns:.86fr .9fr 1.08fr;
+  grid-template-rows:clamp(362px,40.5vh,468px) clamp(92px,10.2vh,124px);
+  align-content:start;
+  gap:min(1.55vh,18px) min(2vw,30px);
+}
+.card{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  border:1px solid var(--rule);
+  border-radius:8px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.014) 24%,rgba(255,255,255,.006)),
+    radial-gradient(120% 130% at 4% 0%,rgba(141,204,255,.070),transparent 52%),
+    rgba(8,18,32,.58);
+  box-shadow:0 22px 58px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.045);
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+}
+.card::before{
+  content:'';
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(141,204,255,.42),transparent);
+  opacity:.72;
+  pointer-events:none;
+}
+.card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:8px;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),transparent 30%) left top / 100% 42% no-repeat,
+    linear-gradient(90deg,rgba(141,204,255,.13),transparent 28%,transparent 72%,rgba(141,204,255,.09)) left top / 100% 100% no-repeat;
+  opacity:.58;
+}
+.card-inner{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  padding:min(1.85vh,22px) min(1.45vw,26px);
+}
+.card-title{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:clamp(8px,.7vw,12px);
+  color:rgba(207,235,255,.90);
+  font-family:var(--font-sans);
+  font-size:clamp(18px,1.32vw,24px);
+  font-weight:600;
+  line-height:1.22;
+  letter-spacing:.01em;
+  text-shadow:0 0 14px rgba(141,204,255,.10);
+  padding-bottom:min(1vh,12px);
+  border-bottom:0;
+}
+.card-title::before{
+  content:'';
+  flex:0 0 auto;
+  width:clamp(3px,.26vw,5px);
+  height:1.05em;
+  margin-top:.07em;
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(94,231,255,.95),rgba(141,204,255,.36));
+  box-shadow:0 0 16px rgba(94,231,255,.30);
+}
+.card-title::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,rgba(94,231,255,.34),rgba(141,204,255,.13) 38%,transparent);
+}
+.card-copy{
+  margin-top:min(1.05vh,12px);
+  color:rgba(247,251,255,.64);
+  font-size:clamp(12px,.88vw,16px);
+  line-height:1.52;
+}
+.left-card{grid-row:1 / 3;}
+.left-card{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.010) 28%,rgba(255,255,255,.004)),
+    radial-gradient(95% 70% at 50% 72%,rgba(92,170,255,.09),transparent 62%),
+    rgba(8,18,32,.60);
+}
+.left-card .card-inner{justify-content:space-between;}
+.matrix{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:min(1.35vh,16px);
+  overflow:hidden;
+  border:1px solid rgba(141,204,255,.095);
+  color:rgba(247,251,255,.70);
+  font-size:clamp(11px,.82vw,14px);
+}
+.matrix th,.matrix td{
+  height:clamp(26px,2.85vh,36px);
+  border:1px solid rgba(141,204,255,.075);
+  text-align:center;
+  vertical-align:middle;
+}
+.matrix thead th{
+  color:rgba(247,251,255,.82);
+  font-weight:500;
+  background:rgba(141,204,255,.075);
+}
+.matrix tbody th{
+  width:28%;
+  color:rgba(247,251,255,.80);
+  font-weight:500;
+  background:rgba(255,255,255,.024);
+}
+.check{color:var(--accent-blue);font-family:var(--font-mono);font-weight:600;}
+.cross{color:rgba(247,251,255,.42);font-family:var(--font-mono);font-weight:600;}
+.signal-area{
+  position:relative;
+  flex:1;
+  min-height:min(19vh,220px);
+  margin-top:min(1.3vh,16px);
+  display:grid;
+  place-items:center;
+}
+.signal-visual{
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:min(12.8vw,178px);
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+}
+.signal-cycle{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:100%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  overflow:visible;
+  filter:drop-shadow(0 0 18px rgba(92,170,255,.20));
+  animation:cycleSpin 8s linear infinite;
+}
+.signal-cycle path,.signal-cycle circle{
+  fill:none;
+  stroke:rgba(141,204,255,.62);
+  stroke-width:2.4;
+  stroke-linecap:round;
+}
+.signal-cycle .cycle-track{
+  stroke:rgba(141,204,255,.18);
+  stroke-width:18;
+  filter:blur(.3px);
+}
+.signal-cycle .cycle-flow{
+  stroke:rgba(94,231,255,.84);
+  stroke-dasharray:82 210;
+  filter:drop-shadow(0 0 8px rgba(94,231,255,.45));
+}
+.signal-orb{
+  position:absolute;
+  width:clamp(22px,2.05vw,34px);
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 28%,rgba(234,255,255,.95),rgba(94,231,255,.82) 45%,rgba(105,146,255,.55));
+  box-shadow:0 0 18px rgba(94,231,255,.38),0 0 34px rgba(92,170,255,.20);
+  animation:orbPulse 2.8s ease-in-out infinite;
+}
+.signal-orb.o1{left:36%;top:21%;animation-delay:.1s;}
+.signal-orb.o2{right:25%;top:43%;animation-delay:.6s;background:radial-gradient(circle at 35% 28%,rgba(234,255,255,.95),rgba(94,231,255,.82) 45%,rgba(105,146,255,.55));}
+.signal-orb.o3{left:36%;bottom:12%;animation-delay:1.1s;background:radial-gradient(circle at 35% 28%,rgba(250,255,255,.95),rgba(178,218,255,.88) 45%,rgba(92,170,255,.55));}
+.signal-core-glow{
+  position:absolute;
+  inset:22%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(141,204,255,.22),rgba(92,170,255,.11) 54%,transparent 72%);
+  box-shadow:0 0 36px rgba(92,170,255,.22),inset 0 0 26px rgba(141,204,255,.16);
+  animation:coreBreath 3.8s ease-in-out infinite;
+}
+.signal-label{
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:min(6.7vw,94px);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(141,204,255,.34);
+  background:radial-gradient(circle,rgba(141,204,255,.20),rgba(9,26,45,.82) 70%);
+  box-shadow:0 0 36px rgba(92,170,255,.18),inset 0 0 24px rgba(141,204,255,.10);
+  color:rgba(232,248,255,.96);
+  font-family:var(--font-sans);
+  font-size:clamp(15px,1vw,19px);
+  font-weight:500;
+  line-height:1.25;
+  text-align:center;
+  white-space:nowrap;
+}
+.signal-node{
+  position:absolute;
+  min-width:clamp(78px,6.8vw,112px);
+  color:rgba(247,251,255,.96);
+  font-family:var(--font-sans);
+  font-size:clamp(14px,1vw,19px);
+  font-weight:600;
+  line-height:1.15;
+  white-space:nowrap;
+  text-shadow:0 0 18px rgba(92,170,255,.34);
+  animation:labelFloat 4.6s ease-in-out infinite;
+}
+.signal-node::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  width:clamp(24px,2.2vw,42px);
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(141,204,255,.58));
+}
+.signal-node::before{
+  content:'';
+  position:absolute;
+  top:calc(50% - 3px);
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:rgba(94,231,255,.88);
+  box-shadow:0 0 12px rgba(94,231,255,.38);
+}
+.signal-node.n1{
+  left:0;
+  top:19%;
+  text-align:left;
+}
+.signal-node.n1::after{left:100%;}
+.signal-node.n1::before{display:none;}
+.signal-node.n2{
+  right:0;
+  top:41%;
+  text-align:right;
+  animation-delay:.35s;
+}
+.signal-node.n2::after{
+  right:100%;
+  background:linear-gradient(90deg,rgba(141,204,255,.58),transparent);
+}
+.signal-node.n2::before{display:none;}
+.signal-node.n3{
+  left:0;
+  bottom:12%;
+  text-align:left;
+  animation-delay:.7s;
+}
+.signal-node.n3::after{left:100%;}
+.signal-node.n3::before{display:none;}
+@keyframes cycleSpin{
+  to{transform:translate(-50%,-50%) rotate(360deg);}
+}
+@keyframes orbPulse{
+  0%,100%{transform:scale(.96);opacity:.80;}
+  50%{transform:scale(1.08);opacity:1;}
+}
+@keyframes coreBreath{
+  0%,100%{transform:scale(.96);opacity:.72;}
+  50%{transform:scale(1.04);opacity:1;}
+}
+@keyframes labelFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-3px);}
+}
+.center-card .card-inner,.right-card .card-inner{gap:min(1.2vh,14px);}
+.center-card .card-inner{gap:min(.95vh,12px);}
+.image-panel{
+  flex:1;
+  min-height:min(15vh,168px);
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:6px;
+  background:rgba(247,251,255,.94);
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  padding:0;
+  box-shadow:0 14px 34px rgba(0,0,0,.18),0 0 0 1px rgba(141,204,255,.025);
+}
+.figure-image{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  object-position:center;
+}
+.challenge-figure{object-fit:contain;background:#fff;}
+.center-card .image-panel{
+  flex:0 0 auto;
+  width:100%;
+  align-self:stretch;
+  aspect-ratio:639 / 276;
+  max-height:min(24vh,260px);
+  min-height:0;
+}
+.right-card .image-panel{
+  flex:0 0 min(22vh,230px);
+  min-height:0;
+}
+.decode-stack{
+  width:100%;
+  height:100%;
+  min-height:120px;
+  display:grid;
+  grid-template-columns:.88fr 1.12fr;
+  gap:1px;
+  background:rgba(7,14,28,.18);
+}
+.decode-stack .figure-image{
+  background:#fff;
+  min-height:0;
+}
+.decode-stack .libri-figure{
+  object-fit:contain;
+  object-position:center center;
+}
+.decode-stack .meg-figure{
+  object-fit:contain;
+  object-position:center center;
+}
+.highlight{
+  color:var(--accent-blue);
+  font-weight:600;
+  font-size:1.04em;
+}
+.right-card .card-copy{margin-top:0;}
+.accuracy-viz{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:min(1vw,16px);
+  padding:clamp(8px,1vh,12px) clamp(10px,1vw,16px);
+  border:1px solid rgba(141,204,255,.11);
+  border-radius:6px;
+  background:
+    linear-gradient(90deg,rgba(141,204,255,.060),rgba(94,231,255,.035),rgba(141,204,255,.070)),
+    rgba(255,255,255,.020);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 10px 24px rgba(0,0,0,.12);
+}
+.accuracy-point{
+  min-width:clamp(58px,4.6vw,82px);
+}
+.accuracy-label{
+  display:block;
+  color:rgba(247,251,255,.56);
+  font-size:clamp(10px,.7vw,13px);
+  line-height:1.1;
+}
+.accuracy-value{
+  display:block;
+  margin-top:4px;
+  color:rgba(247,251,255,.92);
+  font-family:var(--font-mono);
+  font-size:clamp(18px,1.42vw,28px);
+  font-weight:600;
+  line-height:1;
+}
+.accuracy-point.after{
+  text-align:right;
+}
+.accuracy-point.after .accuracy-value{
+  color:rgba(94,231,255,.98);
+  text-shadow:0 0 18px rgba(94,231,255,.28);
+}
+.accuracy-rail{
+  position:relative;
+  height:clamp(26px,3vh,38px);
+  display:flex;
+  align-items:center;
+}
+.accuracy-rail::before{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:4px;
+  border-radius:999px;
+  background:rgba(247,251,255,.10);
+  transform:translateY(-50%);
+}
+.accuracy-rail::after{
+  content:'';
+  position:absolute;
+  left:0;
+  top:50%;
+  width:73.8%;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg,rgba(141,204,255,.45),rgba(94,231,255,.95));
+  box-shadow:0 0 18px rgba(94,231,255,.28);
+  transform:translateY(-50%);
+  animation:accuracyFill 1.8s var(--ease) both;
+}
+.accuracy-lift{
+  position:relative;
+  z-index:1;
+  margin:auto;
+  padding:4px 9px;
+  border:1px solid rgba(94,231,255,.18);
+  border-radius:999px;
+  background:rgba(7,20,34,.76);
+  color:rgba(208,247,255,.94);
+  font-size:clamp(10px,.72vw,13px);
+  font-weight:600;
+  line-height:1;
+  white-space:nowrap;
+}
+@keyframes accuracyFill{
+  from{width:5%;}
+  to{width:73.8%;}
+}
+.bottom-card{
+  grid-column:2 / 4;
+  min-height:0;
+  background:
+    linear-gradient(90deg,rgba(141,204,255,.052),transparent 38%),
+    linear-gradient(180deg,rgba(255,255,255,.038),rgba(255,255,255,.010)),
+    rgba(8,18,32,.55);
+}
+.bottom-card .card-inner{
+  display:grid;
+  grid-template-columns:.84fr 1.28fr .48fr;
+  align-items:center;
+  gap:min(2vw,28px);
+  padding:min(1.1vh,12px) min(1.45vw,26px);
+}
+.bottom-card .card-title{
+  font-size:clamp(17px,1.18vw,22px);
+  padding-bottom:min(.8vh,9px);
+  white-space:nowrap;
+}
+.bottom-card p{
+  color:rgba(247,251,255,.70);
+  font-size:clamp(12px,.88vw,16px);
+  line-height:1.42;
+}
+.radar-image{
+  justify-self:end;
+  width:min(7.2vw,104px);
+  height:auto;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  border-radius:6px;
+  background:rgba(247,251,255,.92);
+  border:1px solid rgba(255,255,255,.075);
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+}
+@media (min-height:900px) and (min-width:1200px){
+  .shell{
+    gap:clamp(20px,1.9vh,26px);
+    padding:clamp(34px,3.3vh,44px) min(4.5vw,98px) clamp(38px,3.7vh,52px);
+  }
+  .main-title h2{
+    font-size:clamp(50px,2.9vw,66px);
+  }
+  .main-title p{
+    margin-top:clamp(10px,1vh,14px);
+    font-size:clamp(17px,.92vw,21px);
+  }
+  .logo-strip{
+    min-height:clamp(86px,8.8vh,112px);
+    padding:clamp(16px,1.5vh,22px) min(2.4vw,48px);
+  }
+  .logo-pujiang{height:clamp(38px,3.6vh,52px);}
+  .logo-tsinghua{height:clamp(42px,3.9vh,58px);}
+  .logo-cambridge{height:clamp(40px,3.8vh,56px);}
+  .logo-item + .logo-item::before{
+    height:clamp(40px,4vh,56px);
+  }
+  .board{
+    height:100%;
+    grid-template-rows:minmax(0,1fr) clamp(180px,14vh,220px);
+    align-content:stretch;
+    gap:clamp(20px,1.7vh,26px) min(2.1vw,38px);
+  }
+  .card-inner{
+    padding:clamp(24px,2.15vh,34px) clamp(28px,1.75vw,40px);
+  }
+  .card-title{
+    font-size:clamp(24px,1.28vw,31px);
+    padding-bottom:clamp(12px,1vh,16px);
+  }
+  .card-copy{
+    font-size:clamp(16px,.82vw,20px);
+    line-height:1.6;
+  }
+  .matrix{
+    font-size:clamp(14px,.78vw,18px);
+    margin-top:clamp(16px,1.25vh,22px);
+  }
+  .matrix th,.matrix td{
+    height:clamp(36px,3.15vh,46px);
+  }
+  .signal-area{
+    min-height:clamp(330px,28vh,390px);
+  }
+  .signal-visual{
+    width:clamp(230px,12.8vw,300px);
+  }
+  .signal-label{
+    width:clamp(112px,6vw,142px);
+    font-size:clamp(22px,1.05vw,28px);
+  }
+  .signal-node{
+    font-size:clamp(21px,.98vw,27px);
+  }
+  .center-card .image-panel{
+    width:100%;
+    max-height:clamp(220px,22vh,276px);
+  }
+  .right-card .image-panel{
+    flex-basis:clamp(260px,23vh,330px);
+  }
+  .bottom-card .card-inner{
+    gap:clamp(30px,2vw,44px);
+    padding:clamp(18px,1.45vh,26px) clamp(30px,1.8vw,42px);
+  }
+  .bottom-card .card-title{
+    font-size:clamp(23px,1.18vw,30px);
+  }
+  .bottom-card p{
+    font-size:clamp(16px,.86vw,21px);
+    line-height:1.55;
+  }
+  .radar-image{
+    width:clamp(128px,7vw,160px);
+  }
+}
+@media (max-width:900px){
+  html,body{height:auto;overflow:auto;}
+  .page{position:relative;min-height:100dvh;}
+  .shell{height:auto;min-height:100dvh;padding:22px 18px;grid-template-rows:auto auto auto auto;}
+  .masthead{flex-direction:column;}
+  .mark-wrap{justify-content:flex-start;}
+  .page-mark{white-space:normal;font-size:24px;}
+  .logo-strip{flex-wrap:wrap;gap:18px;}
+  .logo-item + .logo-item::before{display:none;}
+  .board{grid-template-columns:1fr;grid-template-rows:auto;gap:16px;}
+  .bottom-card{grid-column:auto;}
+  .bottom-card .card-inner{grid-template-columns:1fr;}
+  .radar-image{justify-self:start;width:170px;max-height:none;}
+  .card{min-height:260px;}
 }
 </style>
 </head>
 <body>
-<main class="cover">
+<main class="page">
   <section class="shell">
-    <header class="topline">
-      <div class="meta">BRAINOMNI FOUNDATION MODEL</div>
-    </header>
-    <section class="hero">
-      <div class="content">
-        <h1><strong>AI+脑机接口</strong></h1>
-        <div class="subtitle">BrainOmni 全球首个统一脑电与脑磁的大脑基础模型</div>
-        <p class="intro">通过模拟脑科学中源重构算法的前向过程，并显式建模传感器的真实物理属性，实现跨设备、跨模态、跨任务、跨被试的统一建模。通过大规模自监督预训练，<em>BrainOmni</em> 在多种下游任务表现优越。工作配套提出 BrainTokenizer，把连续的脑活动压缩并量化为离散神经词元，为大规模“脑信号语言建模”奠定基础。</p>
+    <header class="masthead">
+      <div class="title-wrap"></div>
+      <div class="mark-wrap">
+        <div class="page-mark" aria-label="页面角标">AI+脑机接口</div>
       </div>
+    </header>
+
+    <section class="main-title" aria-label="项目标题">
+      <h2>通专融合的脑电磁基础模型 BrainOmni</h2>
+      <p>基于非侵入式脑电磁信号的基础模型，提升脑科学和脑机接口研究，目标取得非侵入式语义解码任务突破</p>
     </section>
-    <footer class="bottom">
-      <div class="signal"><span>EEG + MEG</span><span>BrainTokenizer</span><span>Self-Supervised Pretrain</span></div>
-    </footer>
+
+    <section class="logo-strip" aria-label="合作机构">
+      <span class="logo-item"><img class="logo-pujiang" src="logo/浦江标准LOGO.svg" alt="浦江实验室"></span>
+      <span class="logo-item"><img class="logo-tsinghua" src="logo/清华大学.svg" alt="清华大学"></span>
+      <span class="logo-item"><img class="logo-cambridge" src="logo/剑桥.png" alt="英国剑桥大学"></span>
+    </section>
+
+    <section class="board">
+      <article class="card left-card">
+        <div class="card-inner">
+          <div>
+            <h3 class="card-title">非侵入式脑机接口</h3>
+            <p class="card-copy">获取高时间精度和高空间精度的脑信号，是非侵入式脑机接口大规模应用的关键。</p>
+            <table class="matrix" aria-label="脑信号模态对比">
+              <thead>
+                <tr><th></th><th>脑电图</th><th>脑磁图</th><th>近红外</th><th>磁共振</th></tr>
+              </thead>
+              <tbody>
+                <tr><th>可穿戴</th><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">×</td></tr>
+                <tr><th>时间精度</th><td class="check">✓</td><td class="check">✓</td><td class="cross">×</td><td class="cross">×</td></tr>
+                <tr><th>空间精度</th><td class="cross">×</td><td class="check">✓</td><td class="cross">×</td><td class="check">✓</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="signal-area" aria-hidden="true">
+            <div class="signal-visual">
+              <div class="signal-core-glow"></div>
+              <svg class="signal-cycle" viewBox="0 0 240 240" focusable="false">
+                <circle class="cycle-track" cx="120" cy="120" r="82"></circle>
+                <circle class="cycle-flow" cx="120" cy="120" r="82"></circle>
+              </svg>
+            </div>
+            <div class="signal-label">脑信号</div>
+            <span class="signal-node n1">个体差异大</span>
+            <span class="signal-node n2">时间变异高</span>
+            <span class="signal-node n3">数据采集昂贵</span>
+            <span class="signal-orb o1"></span>
+            <span class="signal-orb o2"></span>
+            <span class="signal-orb o3"></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card center-card">
+        <div class="card-inner">
+          <h3 class="card-title">在基于语音的自杀风险、心理危机检测等任务上取得领先成果</h3>
+          <p class="card-copy">研发首个基于语音任务的自杀风险检测大模型、心理危机检测大模型，论文发表 Cell 子刊。</p>
+          <p class="card-copy">举办全球首个基于语音的自杀风险检测技术竞赛，哈佛医学院、剑桥等 110 多支队伍参加。</p>
+          <div class="image-panel">
+            <img class="figure-image challenge-figure" src="assets/g4-speechwellness-challenge.png" alt="The 1st SpeechWellness Challenge">
+          </div>
+        </div>
+      </article>
+
+      <article class="card right-card">
+        <div class="card-inner">
+          <h3 class="card-title">基于同步 EEG 和 MEG 已可初步解码语言</h3>
+          <p class="card-copy">在牛津、DeepMind、Meta 等主办的 MEG 语言解码竞赛获得双赛道 Leaderboard 最好成绩。</p>
+          <div class="accuracy-viz" aria-label="39 音素分类准确率从约 5% 突破至 73.8%">
+            <div class="accuracy-point before">
+              <span class="accuracy-label">基线</span>
+              <span class="accuracy-value">~5%</span>
+            </div>
+            <div class="accuracy-rail">
+              <span class="accuracy-lift">39 音素分类准确率</span>
+            </div>
+            <div class="accuracy-point after">
+              <span class="accuracy-label">突破</span>
+              <span class="accuracy-value">73.8%</span>
+            </div>
+          </div>
+          <div class="image-panel">
+            <div class="decode-stack">
+              <img class="figure-image libri-figure" src="assets/g4-libribrain.png" alt="LibriBrain dataset overview">
+              <img class="figure-image meg-figure" src="assets/g4-meg-language-decoding.png" alt="MEG language decoding visualization">
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card bottom-card">
+        <div class="card-inner">
+          <h3 class="card-title">多种下游任务性能领先</h3>
+          <p>抑郁、自闭、情感、异常检测、运动想象等任务测试性能领先；第三方全面评测为效果最好的 EEG 基础模型。欧美高校和 MEG 领导企业主动联系寻求合作。</p>
+          <img class="radar-image" src="assets/g4-eeg-benchmark-radar.png" alt="Balanced Accuracy on EEG Datasets by Model">
+        </div>
+      </article>
+    </section>
   </section>
 </main>
 </body>

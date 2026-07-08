@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI+脑机接口：BrainOmni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f7fbff;
+  --ink-soft:rgba(247,251,255,.74);
+  --ink-mute:rgba(247,251,255,.50);
+  --paper:#070E1C;
+  --panel:rgba(12,21,34,.66);
+  --panel-strong:rgba(13,28,48,.74);
+  --rule:rgba(141,204,255,.18);
+  --rule-soft:rgba(255,255,255,.075);
+  --accent-blue:#8dccff;
+  --blue:#8dccff;
+  --violet:#5caaff;
+  --font-sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+  --font-serif:'Songti SC','STSong','Noto Serif SC','Source Han Serif SC','SimSun',serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.page{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:
+    radial-gradient(72% 88% at 50% 42%,rgba(92,170,255,.11),transparent 62%),
+    radial-gradient(40% 56% at 84% 36%,rgba(142,118,255,.10),transparent 64%),
+    linear-gradient(135deg,rgba(13,70,139,.28),transparent 30%),
+    #070E1C;
+}
+.page::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px),
+    linear-gradient(135deg,transparent 0 18%,rgba(25,102,198,.14) 18% 31%,transparent 31%),
+    linear-gradient(315deg,transparent 0 12%,rgba(24,86,171,.14) 12% 25%,transparent 25%);
+  background-size:72px 72px,72px 72px,100% 100%,100% 100%;
+  mask-image:radial-gradient(circle at 50% 46%,black,transparent 78%);
+  pointer-events:none;
+}
+.page::after{
+  content:'';
+  position:absolute;
+  width:150%;
+  height:260px;
+  left:-28%;
+  top:4%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),rgba(141,204,255,.11),transparent);
+  filter:blur(110px);
+  transform:rotate(-34deg);
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.shell{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:grid;
+  grid-template-rows:auto auto 1fr;
+  gap:min(1.65vh,18px);
+  padding:min(2.7vh,30px) min(4.3vw,84px) min(2.6vh,30px);
+}
+.masthead{
+  display:flex;
+  align-items:start;
+  justify-content:space-between;
+  gap:28px;
+}
+.title-wrap{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:min(.9vh,10px);
+}
+.mark-wrap{
+  display:flex;
+  justify-content:flex-end;
+  min-width:max-content;
+}
+.page-mark{
+  display:inline-flex;
+  align-items:center;
+  min-height:clamp(24px,2.2vw,36px);
+  color:rgba(247,251,255,.58);
+  font-family:var(--font-sans);
+  font-size:clamp(14px,1.22vw,20px);
+  font-weight:400;
+  line-height:1;
+  letter-spacing:.06em;
+  white-space:nowrap;
+  text-shadow:0 0 18px rgba(92,170,255,.10);
+}
+.main-title{
+  margin-top:min(.4vh,6px);
+  text-align:center;
+}
+.main-title h2{
+  font-family:var(--font-sans);
+  font-size:clamp(34px,3.05vw,54px);
+  font-weight:600;
+  line-height:1.12;
+  letter-spacing:0;
+  color:rgba(247,251,255,.96);
+  text-shadow:0 0 28px rgba(141,204,255,.18);
+}
+.main-title p{
+  margin-top:min(.9vh,10px);
+  max-width:min(980px,60vw);
+  margin-left:auto;
+  margin-right:auto;
+  color:rgba(141,204,255,.82);
+  font-size:clamp(13px,1.03vw,18px);
+  line-height:1.45;
+}
+.logo-strip{
+  position:relative;
+  width:100%;
+  min-height:min(4.3vh,48px);
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:min(3.2vw,56px);
+  border:1px solid rgba(141,204,255,.16);
+  border-radius:6px;
+  background:linear-gradient(90deg,transparent,rgba(141,204,255,.05),transparent),rgba(255,255,255,.025);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.logo-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.logo-item + .logo-item::before{
+  content:'';
+  position:absolute;
+  left:calc(min(3.2vw,56px) / -2);
+  top:50%;
+  width:1px;
+  height:28px;
+  background:rgba(247,251,255,.22);
+  transform:translateY(-50%);
+}
+.logo-item img{
+  display:block;
+  width:auto;
+  max-width:min(15vw,240px);
+  object-fit:contain;
+  opacity:.90;
+  filter:drop-shadow(0 0 16px rgba(141,204,255,.14));
+}
+.logo-pujiang{height:clamp(22px,2.8vh,34px);}
+.logo-tsinghua{height:clamp(24px,3vh,36px);}
+.logo-cambridge{height:clamp(21px,2.65vh,32px);}
+.board{
+  min-height:0;
+  display:grid;
+  grid-template-columns:.86fr .9fr 1.08fr;
+  grid-template-rows:clamp(410px,46vh,510px) clamp(112px,11.8vh,142px);
+  align-content:start;
+  gap:min(1.7vh,20px) min(2vw,30px);
+}
+.card{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  border:1px solid var(--rule);
+  border-radius:6px;
+  background:
+    radial-gradient(90% 125% at 8% 0%,rgba(141,204,255,.10),transparent 58%),
+    var(--panel);
+  box-shadow:0 20px 60px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.05);
+  overflow:hidden;
+}
+.card::after{
+  content:'';
+  position:absolute;
+  inset:1px;
+  border-radius:5px;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(224,244,255,.18),transparent 34%) left top / 46% 1px no-repeat,
+    linear-gradient(90deg,transparent,rgba(141,204,255,.16)) right bottom / 40% 1px no-repeat,
+    linear-gradient(180deg,rgba(224,244,255,.13),transparent 36%) left top / 1px 44% no-repeat,
+    linear-gradient(180deg,transparent,rgba(141,204,255,.13)) right bottom / 1px 42% no-repeat;
+  opacity:.82;
+}
+.card-inner{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  padding:min(1.85vh,22px) min(1.45vw,26px);
+}
+.card-title{
+  color:rgba(197,230,255,.94);
+  font-family:var(--font-sans);
+  font-size:clamp(18px,1.42vw,26px);
+  font-weight:500;
+  line-height:1.22;
+  letter-spacing:.01em;
+  text-shadow:0 0 16px rgba(141,204,255,.12);
+  padding-bottom:min(.9vh,10px);
+  border-bottom:1px solid rgba(141,204,255,.105);
+}
+.card-copy{
+  margin-top:min(1.05vh,12px);
+  color:rgba(247,251,255,.70);
+  font-size:clamp(12px,.88vw,16px);
+  line-height:1.52;
+}
+.left-card{grid-row:1 / 3;}
+.left-card .card-inner{justify-content:space-between;}
+.matrix{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:min(1.35vh,16px);
+  overflow:hidden;
+  border:1px solid rgba(141,204,255,.13);
+  color:rgba(247,251,255,.76);
+  font-size:clamp(11px,.82vw,14px);
+}
+.matrix th,.matrix td{
+  height:clamp(26px,2.85vh,36px);
+  border:1px solid rgba(141,204,255,.105);
+  text-align:center;
+  vertical-align:middle;
+}
+.matrix thead th{
+  color:rgba(247,251,255,.86);
+  font-weight:500;
+  background:rgba(141,204,255,.12);
+}
+.matrix tbody th{
+  width:28%;
+  color:rgba(247,251,255,.86);
+  font-weight:500;
+  background:rgba(255,255,255,.035);
+}
+.check{color:var(--accent-blue);font-family:var(--font-mono);font-weight:600;}
+.cross{color:rgba(247,251,255,.42);font-family:var(--font-mono);font-weight:600;}
+.signal-area{
+  position:relative;
+  flex:1;
+  min-height:min(15vh,172px);
+  margin-top:min(1.3vh,16px);
+}
+.signal-orbit{
+  position:absolute;
+  left:50%;
+  top:54%;
+  width:min(10.8vw,164px);
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(141,204,255,.32);
+  background:radial-gradient(circle,rgba(141,204,255,.12),rgba(92,170,255,.10) 44%,transparent 68%);
+  box-shadow:0 0 40px rgba(92,170,255,.18),inset 0 0 32px rgba(141,204,255,.11);
+}
+.signal-orbit::before,.signal-orbit::after{
+  content:'';
+  position:absolute;
+  inset:14%;
+  border-radius:50%;
+  border:1px dashed rgba(141,204,255,.36);
+}
+.signal-orbit::after{
+  inset:31%;
+  background:rgba(9,26,45,.72);
+  border-style:solid;
+}
+.signal-label{
+  position:absolute;
+  left:50%;
+  top:54%;
+  transform:translate(-50%,-50%);
+  color:rgba(232,248,255,.96);
+  font-family:var(--font-sans);
+  font-size:clamp(16px,1.08vw,21px);
+  font-weight:500;
+  white-space:nowrap;
+}
+.dot{
+  position:absolute;
+  width:clamp(20px,2.2vw,34px);
+  aspect-ratio:1;
+  border-radius:50%;
+  background:linear-gradient(135deg,rgba(141,204,255,.88),rgba(92,170,255,.54));
+  box-shadow:0 0 22px rgba(141,204,255,.22);
+}
+.dot.a{left:64%;top:4%;}
+.dot.b{left:18%;top:30%;background:linear-gradient(135deg,rgba(190,222,250,.84),rgba(92,170,255,.50));}
+.dot.c{left:58%;bottom:0;background:linear-gradient(135deg,rgba(190,222,250,.86),rgba(92,170,255,.55));}
+.signal-tag{
+  position:absolute;
+  color:rgba(247,251,255,.96);
+  font-family:var(--font-sans);
+  font-size:clamp(14px,.98vw,19px);
+  font-weight:500;
+  white-space:nowrap;
+  text-shadow:0 0 16px rgba(92,170,255,.22);
+}
+.signal-tag.t1{left:0;top:16%;}
+.signal-tag.t2{right:0;top:33%;}
+.signal-tag.t3{left:0;bottom:10%;}
+.center-card .card-inner,.right-card .card-inner{gap:min(1.2vh,14px);}
+.center-card .card-inner{gap:min(.95vh,12px);}
+.image-panel{
+  flex:1;
+  min-height:min(15vh,168px);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:4px;
+  background:rgba(247,251,255,.94);
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  padding:0;
+}
+.figure-image{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  object-position:center;
+}
+.challenge-figure{object-fit:contain;background:#fff;}
+.center-card .image-panel{
+  flex:0 0 auto;
+  width:90%;
+  align-self:center;
+  aspect-ratio:639 / 276;
+  min-height:0;
+}
+.right-card .image-panel{
+  flex:0 0 min(22vh,230px);
+  min-height:0;
+}
+.decode-stack{
+  width:100%;
+  height:100%;
+  min-height:120px;
+  display:grid;
+  grid-template-columns:.88fr 1.12fr;
+  gap:1px;
+  background:rgba(7,14,28,.18);
+}
+.decode-stack .figure-image{
+  background:#fff;
+  min-height:0;
+}
+.decode-stack .libri-figure{
+  object-fit:contain;
+  object-position:center center;
+}
+.decode-stack .meg-figure{
+  object-fit:contain;
+  object-position:center center;
+}
+.highlight{
+  color:var(--accent-blue);
+  font-weight:600;
+  font-size:1.04em;
+}
+.right-card .card-copy{margin-top:0;}
+.bottom-card{
+  grid-column:2 / 4;
+  min-height:0;
+}
+.bottom-card .card-inner{
+  display:grid;
+  grid-template-columns:.62fr 1.48fr .48fr;
+  align-items:center;
+  gap:min(2vw,28px);
+  padding:min(1.1vh,12px) min(1.45vw,26px);
+}
+.bottom-card .card-title{font-size:clamp(18px,1.32vw,24px);}
+.bottom-card p{
+  color:rgba(247,251,255,.70);
+  font-size:clamp(12px,.88vw,16px);
+  line-height:1.42;
+}
+.radar-image{
+  justify-self:end;
+  width:min(7.2vw,104px);
+  height:auto;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  border-radius:4px;
+  background:rgba(247,251,255,.92);
+  border:1px solid rgba(255,255,255,.08);
+}
+@media (max-width:900px){
+  html,body{height:auto;overflow:auto;}
+  .page{position:relative;min-height:100dvh;}
+  .shell{height:auto;min-height:100dvh;padding:22px 18px;grid-template-rows:auto auto auto auto;}
+  .masthead{flex-direction:column;}
+  .mark-wrap{justify-content:flex-start;}
+  .page-mark{white-space:normal;font-size:24px;}
+  .logo-strip{flex-wrap:wrap;gap:18px;}
+  .logo-item + .logo-item::before{display:none;}
+  .board{grid-template-columns:1fr;grid-template-rows:auto;gap:16px;}
+  .bottom-card{grid-column:auto;}
+  .bottom-card .card-inner{grid-template-columns:1fr;}
+  .radar-image{justify-self:start;width:170px;max-height:none;}
+  .card{min-height:260px;}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="shell">
+    <header class="masthead">
+      <div class="title-wrap"></div>
+      <div class="mark-wrap">
+        <div class="page-mark" aria-label="页面角标">AI+脑机接口</div>
+      </div>
+    </header>
+
+    <section class="main-title" aria-label="项目标题">
+      <h2>通专融合的脑电磁基础模型 BrainOmni</h2>
+      <p>基于非侵入式脑电磁信号的基础模型，提升脑科学和脑机接口研究，目标取得非侵入式语义解码任务突破</p>
+    </section>
+
+    <section class="logo-strip" aria-label="合作机构">
+      <span class="logo-item"><img class="logo-pujiang" src="../logo/浦江标准LOGO.svg" alt="浦江实验室"></span>
+      <span class="logo-item"><img class="logo-tsinghua" src="../logo/清华大学.svg" alt="清华大学"></span>
+      <span class="logo-item"><img class="logo-cambridge" src="../logo/剑桥.png" alt="英国剑桥大学"></span>
+    </section>
+
+    <section class="board">
+      <article class="card left-card">
+        <div class="card-inner">
+          <div>
+            <h3 class="card-title">非侵入式脑机接口</h3>
+            <p class="card-copy">获取高时间精度和高空间精度的脑信号，是非侵入式脑机接口大规模应用的关键。</p>
+            <table class="matrix" aria-label="脑信号模态对比">
+              <thead>
+                <tr><th></th><th>脑电图</th><th>脑磁图</th><th>近红外</th><th>磁共振</th></tr>
+              </thead>
+              <tbody>
+                <tr><th>可穿戴</th><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="cross">×</td></tr>
+                <tr><th>时间精度</th><td class="check">✓</td><td class="check">✓</td><td class="cross">×</td><td class="cross">×</td></tr>
+                <tr><th>空间精度</th><td class="cross">×</td><td class="check">✓</td><td class="cross">×</td><td class="check">✓</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="signal-area" aria-hidden="true">
+            <div class="signal-orbit"></div>
+            <div class="signal-label">脑信号</div>
+            <span class="dot a"></span>
+            <span class="dot b"></span>
+            <span class="dot c"></span>
+            <span class="signal-tag t1">个体差异大</span>
+            <span class="signal-tag t2">时间变异高</span>
+            <span class="signal-tag t3">数据采集昂贵</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card center-card">
+        <div class="card-inner">
+          <h3 class="card-title">在基于语音的自杀风险、心理危机检测等任务上取得领先成果</h3>
+          <p class="card-copy">研发首个基于语音任务的自杀风险检测大模型、心理危机检测大模型，论文发表 Cell 子刊。</p>
+          <p class="card-copy">举办全球首个基于语音的自杀风险检测技术竞赛，哈佛医学院、剑桥等 110 多支队伍参加。</p>
+          <div class="image-panel">
+            <img class="figure-image challenge-figure" src="../assets/g4-speechwellness-challenge.png" alt="The 1st SpeechWellness Challenge">
+          </div>
+        </div>
+      </article>
+
+      <article class="card right-card">
+        <div class="card-inner">
+          <h3 class="card-title">基于同步 EEG 和 MEG 已可初步解码语言</h3>
+          <p class="card-copy">在牛津、DeepMind、Meta 等主办的 MEG 语言解码竞赛获得双赛道 Leaderboard 最好成绩。</p>
+          <p class="card-copy"><span class="highlight">39 音素分类准确率从 ~5% 突破至 73.8%</span></p>
+          <div class="image-panel">
+            <div class="decode-stack">
+              <img class="figure-image libri-figure" src="../assets/g4-libribrain.png" alt="LibriBrain dataset overview">
+              <img class="figure-image meg-figure" src="../assets/g4-meg-language-decoding.png" alt="MEG language decoding visualization">
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card bottom-card">
+        <div class="card-inner">
+          <h3 class="card-title">多种下游任务性能领先</h3>
+          <p>抑郁、自闭、情感、异常检测、运动想象等任务测试性能领先；第三方全面评测为效果最好的 EEG 基础模型。欧美高校和 MEG 领导企业主动联系寻求合作。</p>
+          <img class="radar-image" src="../assets/g4-eeg-benchmark-radar.png" alt="Balanced Accuracy on EEG Datasets by Model">
+        </div>
+      </article>
+    </section>
+  </section>
+</main>
+</body>
+</html>
