@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI+航空航天：航空航天飞行器智能设计</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f7fbff;
+  --ink-soft:rgba(247,251,255,.72);
+  --ink-mute:rgba(247,251,255,.50);
+  --paper:#070E1C;
+  --panel:rgba(8,18,32,.58);
+  --rule:rgba(141,204,255,.105);
+  --accent:#8dccff;
+  --cyan:#5ee7ff;
+  --amber:#f6b35c;
+  --font-sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.page{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:
+    radial-gradient(72% 88% at 50% 42%,rgba(92,170,255,.12),transparent 62%),
+    radial-gradient(42% 58% at 82% 34%,rgba(94,231,255,.07),transparent 64%),
+    radial-gradient(42% 44% at 58% 86%,rgba(246,179,92,.055),transparent 68%),
+    linear-gradient(135deg,rgba(13,70,139,.22),transparent 30%),
+    linear-gradient(180deg,rgba(255,255,255,.018),transparent 28%,rgba(0,0,0,.18)),
+    #070E1C;
+}
+.page::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.011) 1px,transparent 1px),
+    linear-gradient(135deg,transparent 0 18%,rgba(25,102,198,.10) 18% 31%,transparent 31%),
+    linear-gradient(315deg,transparent 0 12%,rgba(24,86,171,.10) 12% 25%,transparent 25%);
+  background-size:72px 72px,72px 72px,100% 100%,100% 100%;
+  mask-image:radial-gradient(circle at 50% 46%,black,transparent 78%);
+  pointer-events:none;
+}
+.page::after{
+  content:'';
+  position:absolute;
+  width:150%;
+  height:260px;
+  left:-28%;
+  top:4%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),rgba(141,204,255,.08),transparent);
+  filter:blur(120px);
+  transform:rotate(-34deg);
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.shell{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:grid;
+  grid-template-rows:auto auto auto 1fr;
+  gap:min(1.55vh,16px);
+  padding:min(2.7vh,30px) min(4.3vw,84px) min(2.6vh,30px);
+}
+.masthead{display:flex;align-items:flex-start;justify-content:flex-start;}
+.page-mark{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:clamp(24px,2.2vw,36px);
+  padding:0 clamp(10px,.75vw,14px);
+  border:1px solid rgba(247,251,255,.12);
+  border-radius:999px;
+  background:rgba(247,251,255,.045);
+  color:rgba(247,251,255,.66);
+  font-family:var(--font-mono);
+  font-size:clamp(11px,.82vw,14px);
+  font-weight:400;
+  line-height:1;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.page-mark::before{
+  content:'';
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(141,204,255,.78);
+  box-shadow:0 0 10px rgba(141,204,255,.24);
+}
+.main-title{text-align:center;}
+.main-title h2{
+  font-size:clamp(34px,2.9vw,50px);
+  font-weight:600;
+  line-height:1.12;
+  color:rgba(247,251,255,.96);
+  text-shadow:0 0 28px rgba(141,204,255,.18);
+}
+.main-title p{
+  margin-top:min(.9vh,10px);
+  color:rgba(141,204,255,.74);
+  font-size:clamp(13px,1.03vw,18px);
+  line-height:1.45;
+  white-space:nowrap;
+}
+.main-title strong{color:rgba(141,204,255,.96);font-weight:600;}
+.logo-strip{
+  position:relative;
+  width:100%;
+  min-height:clamp(66px,8.8vh,78px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:min(3.2vw,56px);
+  padding:clamp(12px,1.45vh,16px) min(2vw,32px);
+  border:1px solid rgba(141,204,255,.10);
+  border-radius:8px;
+  background:
+    linear-gradient(90deg,transparent,rgba(141,204,255,.035),transparent),
+    linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012)),
+    rgba(8,18,32,.38);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 16px 44px rgba(0,0,0,.18);
+  backdrop-filter:blur(12px);
+}
+.logo-item{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;}
+.logo-item + .logo-item::before{
+  content:'';
+  position:absolute;
+  left:calc(min(3.2vw,56px) / -2);
+  top:50%;
+  width:1px;
+  height:clamp(24px,3.5vh,34px);
+  background:rgba(247,251,255,.22);
+  transform:translateY(-50%);
+}
+.logo-item img{
+  display:block;
+  width:auto;
+  max-width:min(15vw,240px);
+  object-fit:contain;
+  opacity:.9;
+  filter:drop-shadow(0 0 16px rgba(141,204,255,.14));
+}
+.logo-pujiang{height:clamp(22px,2.8vh,34px);}
+.word-logo{
+  color:rgba(247,251,255,.88);
+  font-size:clamp(17px,1.2vw,23px);
+  font-weight:600;
+  line-height:1.1;
+  white-space:nowrap;
+  text-shadow:0 0 16px rgba(141,204,255,.12);
+}
+.board{
+  min-height:0;
+  display:grid;
+  grid-template-columns:1.04fr 1.26fr;
+  grid-template-rows:minmax(0,1fr);
+  gap:min(1.55vh,18px) min(2vw,30px);
+}
+.card{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  border:1px solid var(--rule);
+  border-radius:8px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.014) 24%,rgba(255,255,255,.006)),
+    radial-gradient(120% 130% at 4% 0%,rgba(141,204,255,.070),transparent 52%),
+    var(--panel);
+  box-shadow:0 22px 58px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.045);
+  backdrop-filter:blur(12px);
+  overflow:hidden;
+}
+.card::before{
+  content:'';
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(141,204,255,.42),transparent);
+  opacity:.72;
+  pointer-events:none;
+}
+.card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:8px;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),transparent 30%) left top / 100% 42% no-repeat,
+    linear-gradient(90deg,rgba(141,204,255,.13),transparent 28%,transparent 72%,rgba(141,204,255,.09)) left top / 100% 100% no-repeat;
+  opacity:.58;
+}
+.card-inner{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  padding:min(1.85vh,22px) min(1.45vw,26px);
+}
+.card-title{
+  position:relative;
+  color:rgba(207,235,255,.90);
+  font-size:clamp(18px,1.32vw,24px);
+  font-weight:600;
+  line-height:1.22;
+  padding-bottom:min(1vh,12px);
+  text-shadow:0 0 14px rgba(141,204,255,.10);
+}
+.card-title::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:rgba(247,251,255,.10);
+}
+.highlight{color:var(--cyan);font-weight:600;}
+.story-card .card-inner{gap:min(1.25vh,15px);}
+.lead-copy{
+  margin-top:min(1.2vh,14px);
+  color:rgba(247,251,255,.70);
+  font-size:clamp(13px,.92vw,17px);
+  line-height:1.66;
+}
+.vehicle-stage{
+  position:relative;
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:min(1.25vh,16px);
+  margin-top:min(1.25vh,16px);
+  padding:clamp(14px,1.45vh,20px);
+  border:1px solid rgba(141,204,255,.11);
+  border-radius:8px;
+  background:
+    radial-gradient(64% 72% at 50% 45%,rgba(94,231,255,.09),transparent 66%),
+    linear-gradient(rgba(141,204,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(141,204,255,.026) 1px,transparent 1px),
+    rgba(4,12,22,.62);
+  background-size:100% 100%,34px 34px,34px 34px,100% 100%;
+  box-shadow:0 18px 42px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.04);
+  overflow:hidden;
+}
+.vehicle-types{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:min(.85vw,12px);
+}
+.vehicle-types span,
+.value-item{
+  border:1px solid rgba(141,204,255,.11);
+  border-radius:7px;
+  background:rgba(141,204,255,.048);
+  color:rgba(247,251,255,.68);
+  text-align:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.vehicle-types span{
+  padding:clamp(8px,.82vh,12px) clamp(10px,.9vw,14px);
+  font-size:clamp(12px,.82vw,16px);
+  line-height:1.2;
+  white-space:nowrap;
+}
+.vehicle-core{
+  position:relative;
+  z-index:1;
+  display:grid;
+  place-items:center;
+  min-height:0;
+}
+.vehicle-core::before,
+.vehicle-core::after{
+  content:'';
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+.vehicle-core::before{
+  width:min(44vh,48%);
+  aspect-ratio:1;
+  border:1px dashed rgba(94,231,255,.34);
+  box-shadow:0 0 38px rgba(94,231,255,.10),inset 0 0 28px rgba(94,231,255,.06);
+  animation:spin 14s linear infinite;
+}
+.vehicle-core::after{
+  width:min(30vh,33%);
+  aspect-ratio:1;
+  border:1px solid rgba(246,179,92,.24);
+  box-shadow:0 0 26px rgba(246,179,92,.08);
+}
+.vehicle-label{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:clamp(112px,8.2vw,154px);
+  aspect-ratio:1;
+  border:1px solid rgba(141,204,255,.24);
+  border-radius:50%;
+  background:
+    radial-gradient(80% 80% at 50% 36%,rgba(141,204,255,.13),transparent 70%),
+    rgba(7,20,34,.94);
+  color:rgba(247,251,255,.94);
+  font-size:clamp(18px,1.16vw,25px);
+  font-weight:600;
+  line-height:1.18;
+  text-align:center;
+  box-shadow:0 0 34px rgba(141,204,255,.11);
+}
+.value-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:min(.85vw,12px);
+}
+.value-item{
+  min-height:clamp(70px,7.8vh,96px);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:6px;
+  padding:clamp(9px,.9vh,12px) clamp(8px,.72vw,12px);
+}
+.value-item b{
+  display:block;
+  color:rgba(207,235,255,.92);
+  font-size:clamp(13px,.92vw,18px);
+  font-weight:600;
+  line-height:1.18;
+}
+.value-item span{
+  display:block;
+  color:rgba(247,251,255,.55);
+  font-size:clamp(10px,.68vw,13px);
+  line-height:1.3;
+}
+.mission-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:min(.9vw,14px);
+  margin-top:min(1.55vh,18px);
+}
+.mission-item{
+  min-width:0;
+  min-height:clamp(84px,9.4vh,112px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:8px;
+  padding:clamp(10px,1.05vh,14px) clamp(10px,.9vw,14px);
+  border:1px solid rgba(141,204,255,.11);
+  border-radius:8px;
+  background:rgba(255,255,255,.026);
+}
+.mission-item b{
+  color:rgba(247,251,255,.94);
+  font-size:clamp(16px,1.08vw,22px);
+  font-weight:600;
+  line-height:1.12;
+}
+.mission-item span{
+  color:rgba(247,251,255,.58);
+  font-size:clamp(10px,.72vw,13px);
+  line-height:1.35;
+}
+.aero-map{
+  position:relative;
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:min(1.2vh,14px);
+  margin-top:min(1.25vh,16px);
+  padding:clamp(12px,1.35vh,16px);
+  border:1px solid rgba(141,204,255,.11);
+  border-radius:8px;
+  background:
+    radial-gradient(70% 82% at 50% 44%,rgba(94,231,255,.07),transparent 64%),
+    linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012)),
+    rgba(4,12,22,.62);
+  box-shadow:0 18px 42px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.04);
+  overflow:hidden;
+}
+.aero-map::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(141,204,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(141,204,255,.026) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(circle at 50% 48%,black,transparent 78%);
+  opacity:.42;
+  pointer-events:none;
+}
+.pipeline{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr;
+  gap:clamp(8px,.82vw,14px);
+  align-items:center;
+}
+.pipe-node{
+  min-width:0;
+  padding:clamp(9px,.92vh,13px) clamp(10px,.9vw,14px);
+  border:1px solid rgba(141,204,255,.13);
+  border-radius:7px;
+  background:linear-gradient(180deg,rgba(255,255,255,.046),rgba(255,255,255,.018));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.pipe-node small{
+  display:block;
+  color:rgba(141,204,255,.44);
+  font-family:var(--font-mono);
+  font-size:clamp(8px,.56vw,11px);
+  line-height:1;
+  text-transform:uppercase;
+}
+.pipe-node b{
+  display:block;
+  margin-top:6px;
+  color:rgba(230,246,255,.94);
+  font-size:clamp(13px,.92vw,17px);
+  font-weight:600;
+  line-height:1.2;
+}
+.pipe-arrow{
+  width:clamp(26px,2.4vw,44px);
+  height:1px;
+  background:linear-gradient(90deg,rgba(246,179,92,.18),rgba(246,179,92,.92));
+  box-shadow:0 0 14px rgba(246,179,92,.24);
+}
+.aero-core{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1fr clamp(132px,11vw,174px) 1fr;
+  gap:clamp(12px,1.4vw,22px);
+  align-items:center;
+}
+.core-ring{
+  position:relative;
+  justify-self:center;
+  width:100%;
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  border:1px dashed rgba(94,231,255,.42);
+  border-radius:50%;
+  box-shadow:0 0 38px rgba(94,231,255,.10),inset 0 0 26px rgba(94,231,255,.06);
+}
+.core-ring::before{
+  content:'';
+  position:absolute;
+  inset:16%;
+  border-radius:50%;
+  border:1px solid rgba(246,179,92,.28);
+  animation:spin 12s linear infinite;
+}
+.core-ring span{
+  position:relative;
+  z-index:1;
+  width:clamp(66px,5.4vw,88px);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(141,204,255,.24);
+  border-radius:50%;
+  background:rgba(7,20,34,.90);
+  color:rgba(247,251,255,.92);
+  font-size:clamp(13px,.88vw,17px);
+  font-weight:600;
+  text-align:center;
+  line-height:1.18;
+}
+.cap-list{display:grid;gap:min(.72vh,9px);}
+.cap-list span{
+  padding:clamp(7px,.7vh,10px) clamp(9px,.8vw,12px);
+  border:1px solid rgba(141,204,255,.10);
+  border-radius:7px;
+  background:rgba(141,204,255,.048);
+  color:rgba(247,251,255,.64);
+  font-size:clamp(11px,.78vw,14px);
+  line-height:1.25;
+  white-space:nowrap;
+}
+.result-strip{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:min(.8vw,12px);
+}
+.result-strip span{
+  padding:clamp(8px,.8vh,11px) clamp(8px,.72vw,12px);
+  border-radius:7px;
+  border:1px solid rgba(94,231,255,.12);
+  background:rgba(94,231,255,.052);
+  color:rgba(174,238,255,.76);
+  font-size:clamp(10px,.72vw,13px);
+  line-height:1.25;
+  text-align:center;
+  white-space:nowrap;
+}
+.application-card .card-inner{gap:min(1.2vh,14px);}
+.application-grid{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:min(1vw,16px);
+}
+.app-module{
+  position:relative;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:min(1vh,12px);
+  padding:clamp(14px,1.45vh,20px) clamp(14px,1.25vw,22px);
+  border:1px solid rgba(141,204,255,.11);
+  border-radius:8px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012)),
+    radial-gradient(92% 86% at 88% 6%,rgba(94,231,255,.070),transparent 60%),
+    rgba(4,12,22,.62);
+  box-shadow:0 16px 38px rgba(0,0,0,.18);
+  overflow:hidden;
+}
+.app-module::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:var(--module-bg);
+  background-size:cover;
+  background-position:center;
+  opacity:.16;
+  filter:saturate(.8) contrast(1.08);
+  pointer-events:none;
+}
+.app-module::after{
+  content:'';
+  position:absolute;
+  inset:12px;
+  border:1px solid rgba(141,204,255,.12);
+  border-radius:6px;
+  pointer-events:none;
+}
+.module-head,
+.module-copy,
+.module-tags{position:relative;z-index:1;}
+.module-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.module-head small{
+  display:block;
+  color:rgba(141,204,255,.50);
+  font-family:var(--font-mono);
+  font-size:clamp(9px,.62vw,12px);
+  line-height:1;
+  text-transform:uppercase;
+}
+.module-head h3{
+  margin-top:7px;
+  color:rgba(247,251,255,.94);
+  font-size:clamp(17px,1.17vw,24px);
+  font-weight:600;
+  line-height:1.18;
+}
+.module-icon{
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  width:clamp(38px,3vw,54px);
+  aspect-ratio:1;
+  border:1px solid rgba(141,204,255,.18);
+  border-radius:50%;
+  background:rgba(141,204,255,.052);
+  color:rgba(174,238,255,.86);
+  box-shadow:0 0 18px rgba(141,204,255,.10);
+}
+.module-icon svg{
+  width:58%;
+  height:58%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.module-copy{
+  display:grid;
+  gap:7px;
+  color:rgba(247,251,255,.64);
+  font-size:clamp(11px,.8vw,15px);
+  line-height:1.42;
+}
+.module-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.module-tags span{
+  padding:5px 8px;
+  border:1px solid rgba(94,231,255,.12);
+  border-radius:999px;
+  background:rgba(94,231,255,.050);
+  color:rgba(174,238,255,.74);
+  font-size:clamp(9px,.62vw,12px);
+  line-height:1;
+  white-space:nowrap;
+}
+.material{--module-bg:url('assets/g2-metamaterial-cover-bg.png');}
+.aero{--module-bg:url('assets/g1-aerospace-cover-bg.png');}
+.weather{--module-bg:url('assets/g6-earth-discovery-cover-bg.png');}
+.propulsion{--module-bg:url('assets/g7-cardioagent-cover-bg.png');}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media (min-height:900px) and (min-width:1200px){
+  .shell{gap:clamp(20px,1.9vh,26px);padding:clamp(34px,3.3vh,44px) min(4.5vw,98px) clamp(38px,3.7vh,52px);}
+  .main-title h2{font-size:clamp(50px,2.9vw,66px);}
+  .main-title p{margin-top:clamp(10px,1vh,14px);font-size:clamp(17px,.92vw,21px);}
+  .logo-strip{min-height:clamp(86px,8.8vh,112px);padding:clamp(16px,1.5vh,22px) min(2.4vw,48px);}
+  .logo-pujiang{height:clamp(38px,3.6vh,52px);}
+  .word-logo{font-size:clamp(22px,1.15vw,30px);}
+  .logo-item + .logo-item::before{height:clamp(40px,4vh,56px);}
+  .board{height:100%;gap:clamp(20px,1.7vh,26px) min(2.1vw,38px);}
+  .card-inner{padding:clamp(24px,2.15vh,34px) clamp(28px,1.75vw,40px);}
+  .card-title{font-size:clamp(24px,1.28vw,31px);padding-bottom:clamp(12px,1vh,16px);}
+  .lead-copy{font-size:clamp(15px,.78vw,18px);}
+  .mission-item b{font-size:clamp(21px,1.12vw,28px);}
+  .mission-item span,.cap-list span,.result-strip span{font-size:clamp(14px,.72vw,17px);}
+  .vehicle-types span{font-size:clamp(15px,.8vw,19px);}
+  .vehicle-label{font-size:clamp(22px,1.08vw,29px);}
+  .value-item b{font-size:clamp(16px,.86vw,21px);}
+  .value-item span{font-size:clamp(12px,.64vw,15px);}
+  .module-head h3{font-size:clamp(23px,1.18vw,31px);}
+  .module-copy{font-size:clamp(14px,.78vw,18px);}
+  .module-tags span{font-size:clamp(11px,.62vw,14px);}
+}
+@media (max-width:900px){
+  html,body{height:auto;overflow:auto;}
+  .page{position:relative;min-height:100dvh;}
+  .shell{height:auto;min-height:100dvh;padding:22px 18px;grid-template-rows:auto auto auto auto;}
+  .main-title p{white-space:normal;}
+  .logo-strip{flex-wrap:wrap;gap:18px;}
+  .logo-item + .logo-item::before{display:none;}
+  .board{grid-template-columns:1fr;grid-template-rows:auto;gap:16px;}
+  .mission-grid,.result-strip,.application-grid,.vehicle-types,.value-grid{grid-template-columns:1fr;}
+  .pipeline{grid-template-columns:1fr;gap:12px;}
+  .pipe-arrow{width:1px;height:26px;justify-self:center;background:linear-gradient(180deg,rgba(246,179,92,.18),rgba(246,179,92,.92));}
+  .aero-core{grid-template-columns:1fr;justify-items:stretch;}
+  .core-ring{width:min(44vw,158px);}
+  .cap-list span,.result-strip span{white-space:normal;}
+  .app-module{min-height:240px;}
+  .vehicle-stage{min-height:520px;}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="shell">
+    <header class="masthead">
+      <div class="page-mark" aria-label="页面角标">AI+航空航天</div>
+    </header>
+
+    <section class="main-title" aria-label="项目标题">
+      <h2>AI 赋能航空航天场景应用</h2>
+      <p>面向可回收火箭、无人机、卫星与空天飞行器，展示 <strong>材料、气动、气象、能源动力</strong> 四类应用方向</p>
+    </section>
+
+    <section class="logo-strip" aria-label="合作机构">
+      <span class="logo-item"><img class="logo-pujiang" src="logo/浦江标准LOGO.svg" alt="浦江实验室"></span>
+      <span class="logo-item"><span class="word-logo">航天科技集团</span></span>
+    </section>
+
+    <section class="board">
+      <article class="card story-card">
+        <div class="card-inner">
+          <div>
+            <h3 class="card-title">航空航天飞行器</h3>
+            <p class="lead-copy">可回收火箭、无人机、卫星等航空航天飞行器场景，围绕材料研发设计、气动设计与仿真、气象监测预报、能源动力四类方向展开。</p>
+          </div>
+
+          <div class="vehicle-stage" aria-label="航空航天飞行器场景总览">
+            <div class="vehicle-types">
+              <span>可回收火箭</span>
+              <span>无人机</span>
+              <span>卫星</span>
+            </div>
+
+            <div class="vehicle-core">
+              <div class="vehicle-label">航空航天<br>飞行器</div>
+            </div>
+
+            <div class="value-grid">
+              <section class="value-item">
+                <b>AI驱动创新</b>
+                <span>加速航空航天技术突破</span>
+              </section>
+              <section class="value-item">
+                <b>智能设计优化</b>
+                <span>提升性能与可靠性</span>
+              </section>
+              <section class="value-item">
+                <b>数据融合赋能</b>
+                <span>实现精准感知与决策</span>
+              </section>
+              <section class="value-item">
+                <b>安全可控发展</b>
+                <span>保障航空航天未来</span>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card application-card">
+        <div class="card-inner">
+          <h3 class="card-title">航空航天飞行器四类应用方向</h3>
+          <div class="application-grid" aria-label="四类应用方向">
+            <section class="app-module material">
+              <div class="module-head">
+                <div>
+                  <small>AI + Materials</small>
+                  <h3>AI+材料<br>研发设计</h3>
+                </div>
+                <span class="module-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M6 7l6-3 6 3v7l-6 3-6-3z"></path><path d="M12 4v7"></path><path d="M6 7l6 4 6-4"></path><path d="M8 18l-3 2"></path><path d="M16 18l3 2"></path></svg>
+                </span>
+              </div>
+              <div class="module-copy">
+                <p>AI 赋能合金与树脂高性能材料智能设计。</p>
+                <p>AI 赋能航天高功能密度结构设计。</p>
+              </div>
+              <div class="module-tags"><span>材料发现</span><span>结构设计</span><span>性能预测</span></div>
+            </section>
+
+            <section class="app-module aero">
+              <div class="module-head">
+                <div>
+                  <small>AI + Aerodynamics</small>
+                  <h3>AI+气动<br>设计与仿真</h3>
+                </div>
+                <span class="module-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M3 14c5-6 11-9 18-9-3 4-5 8-6 12-4-1-8-2-12-3Z"></path><path d="M5 15c4 1 8 2 13 2"></path><path d="M10 9c3 1 6 2 9 4"></path></svg>
+                </span>
+              </div>
+              <div class="module-copy">
+                <p>空天飞行器气动外形智能生成与优化。</p>
+              </div>
+              <div class="module-tags"><span>外形生成</span><span>多目标优化</span><span>仿真校验</span></div>
+            </section>
+
+            <section class="app-module weather">
+              <div class="module-head">
+                <div>
+                  <small>AI + Meteorology</small>
+                  <h3>AI+气象<br>监测预报</h3>
+                </div>
+                <span class="module-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17h10a4 4 0 0 0 0-8 6 6 0 0 0-11.4 1.8A3.2 3.2 0 0 0 7 17Z"></path><path d="M8 20l-1 2"></path><path d="M13 20l-1 2"></path><path d="M18 20l-1 2"></path></svg>
+                </span>
+              </div>
+              <div class="module-copy">
+                <p>聚焦星上气象灾害智能监测与预报。</p>
+                <p>构建星载气象大模型。</p>
+              </div>
+              <div class="module-tags"><span>星上监测</span><span>灾害预警</span><span>任务研判</span></div>
+            </section>
+
+            <section class="app-module propulsion">
+              <div class="module-head">
+                <div>
+                  <small>AI + Propulsion</small>
+                  <h3>AI+能源<br>动力</h3>
+                </div>
+                <span class="module-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M8 3h8l2 7-3 8H9l-3-8z"></path><path d="M9 18l3 4 3-4"></path><path d="M8 10h8"></path></svg>
+                </span>
+              </div>
+              <div class="module-copy">
+                <p>固体推进剂与含能分子智能设计。</p>
+                <p>小型涡轮发动机智能设计。</p>
+              </div>
+              <div class="module-tags"><span>含能分子</span><span>推进系统</span><span>发动机设计</span></div>
+            </section>
+          </div>
+        </div>
+      </article>
+    </section>
+  </section>
+</main>
+</body>
+</html>

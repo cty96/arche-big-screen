@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高原出高峰：AI 科研智能体总览｜山峰对比版</title>
+<style>
+:root{
+  --page-w:2190;
+  --page-h:1250;
+  --page-ratio:1.752;
+  --page-inverse-ratio:.5707762557;
+  --ink:#f7fbff;
+  --ink-soft:rgba(247,251,255,.72);
+  --ink-mute:rgba(247,251,255,.46);
+  --paper:#070E1C;
+  --panel:rgba(10,17,27,.66);
+  --blue:#8dccff;
+  --blue-deep:#5caaff;
+  --warm:#f1a94e;
+  --font-sans:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Sans SC',sans-serif;
+  --font-serif:'Songti SC','STSong','Noto Serif SC','Source Han Serif SC','SimSun',serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+  --ease:cubic-bezier(.2,0,0,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--paper);}
+body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+.overview{
+  position:fixed;
+  left:0;
+  top:0;
+  width:100vw;
+  height:100dvh;
+  min-height:100dvh;
+  overflow:hidden;
+  background:#070E1C;
+}
+.overview::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(7,14,28,.92),rgba(5,10,20,.76) 48%,rgba(7,14,28,.96)),
+    radial-gradient(55% 48% at 50% 50%,rgba(7,14,28,.08),rgba(7,14,28,.58) 68%,rgba(7,14,28,.86)),
+    url('assets/index-mountain-visual.png') center 54% / 66vw auto no-repeat,
+    radial-gradient(54% 62% at 50% 48%,rgba(92,170,255,.16),transparent 64%),
+    radial-gradient(38% 48% at 18% 42%,rgba(141,204,255,.065),transparent 68%),
+    radial-gradient(34% 44% at 82% 58%,rgba(241,169,78,.045),transparent 70%),
+    linear-gradient(180deg,rgba(7,14,28,.98),rgba(5,10,20,.88) 48%,rgba(7,14,28,.98));
+  opacity:1;
+}
+.overview::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(180deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:120px 120px;
+  opacity:.42;
+  mask-image:radial-gradient(circle at center,rgba(0,0,0,.62),transparent 70%);
+}
+.shell{
+  position:relative;
+  z-index:1;
+  height:100%;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  padding:max(30px,3.4vh) max(88px,5.8vw) max(38px,4vh);
+}
+.topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:max(22px,2.2vh);
+  color:rgba(247,251,255,.48);
+  font-family:var(--font-mono);
+  font-size:max(12px,1.18vh);
+  letter-spacing:0;
+  text-transform:uppercase;
+}
+.brand{
+  color:rgba(247,251,255,.90);
+  font-family:var(--font-sans);
+  font-size:max(18px,1.82vh);
+  font-weight:500;
+  letter-spacing:0;
+  text-transform:none;
+}
+.meta::before{content:'//';margin-right:16px;color:rgba(247,251,255,.26);}
+.title{
+  position:absolute;
+  left:50%;
+  top:max(24px,2.5vh);
+  transform:translateX(-50%);
+  min-width:420px;
+  padding:0 max(40px,3vw) max(14px,1.4vh);
+  text-align:center;
+  font-family:var(--font-serif);
+  font-size:max(36px,3.9vh);
+  font-weight:400;
+  letter-spacing:0;
+  color:rgba(247,251,255,.96);
+  text-shadow:0 0 28px rgba(141,204,255,.20);
+  background:none;
+}
+.title::before,.title::after{
+  content:'';
+  position:absolute;
+  bottom:0;
+  width:45%;
+  height:1px;
+  background:
+    linear-gradient(90deg,transparent,rgba(141,204,255,.30) 18%,rgba(247,251,255,.42) 46%,rgba(141,204,255,.14) 72%,transparent),
+    repeating-linear-gradient(90deg,transparent 0 26px,rgba(255,255,255,.16) 26px 27px,transparent 27px 43px);
+  mask-image:linear-gradient(90deg,transparent,black 22%,black 76%,transparent);
+  opacity:.72;
+}
+.title::before{right:50%;margin-right:16px;}
+.title::after{left:50%;margin-left:16px;transform:scaleX(-1);}
+.stage{
+  position:relative;
+  min-height:0;
+  display:grid;
+  place-items:center;
+  padding:min(5vh,54px) 0 min(3vh,32px);
+}
+.orbit-nav{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  overflow:visible;
+  pointer-events:none;
+}
+.orbit-strip{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+.nav-card{
+  --card-bg:url('assets/index-overview-bg.png');
+  --card-delay:0s;
+  --base-transform:translateZ(0);
+  position:absolute;
+  width:min(27vw,480px);
+  height:clamp(92px,10.6vh,126px);
+  display:grid;
+  grid-template-columns:70px 1fr;
+  align-items:center;
+  gap:18px;
+  padding:20px 24px;
+  border:1px solid rgba(168,214,255,.26);
+  border-radius:8px;
+  background:
+    radial-gradient(120% 90% at 14% 18%,rgba(255,255,255,.075),transparent 34%),
+    radial-gradient(46% 72% at 19% 20%,rgba(141,204,255,.13),transparent 56%),
+    radial-gradient(86% 105% at 76% 42%,rgba(92,170,255,.055),transparent 58%),
+    radial-gradient(58% 62% at 86% 70%,rgba(241,169,78,.045),transparent 58%),
+    radial-gradient(68% 120% at 36% 118%,rgba(241,169,78,.035),transparent 55%),
+    rgba(8,16,29,.86);
+  box-shadow:
+    0 22px 58px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -1px 0 rgba(141,204,255,.08);
+  overflow:hidden;
+  isolation:isolate;
+  transition:border-color .22s var(--ease),background .22s var(--ease),box-shadow .22s var(--ease);
+  backdrop-filter:blur(14px);
+  pointer-events:auto;
+  transform:var(--base-transform);
+  animation:card-breathe 18s var(--ease) infinite;
+  animation-delay:var(--card-delay);
+  will-change:transform;
+}
+.nav-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    linear-gradient(90deg,rgba(7,14,28,.92) 0%,rgba(7,14,28,.64) 42%,rgba(7,14,28,.20) 100%),
+    radial-gradient(68% 120% at 86% 50%,rgba(92,170,255,.18),transparent 64%),
+    var(--card-bg) center right / cover no-repeat;
+  opacity:.34;
+  filter:saturate(.92) contrast(1.08);
+  transform:scale(1.04);
+  transition:opacity .22s var(--ease),transform .22s var(--ease),filter .22s var(--ease);
+}
+.nav-card::after{
+  content:'';
+  position:absolute;
+  inset:1px;
+  z-index:1;
+  border-radius:7px;
+  background:
+    linear-gradient(90deg,rgba(224,244,255,.18),rgba(141,204,255,.08),transparent) left top / 38% 1px no-repeat,
+    linear-gradient(90deg,transparent,rgba(141,204,255,.08),rgba(224,244,255,.16)) right bottom / 46% 1px no-repeat,
+    linear-gradient(180deg,rgba(224,244,255,.14),transparent) left top / 1px 42% no-repeat,
+    linear-gradient(180deg,transparent,rgba(141,204,255,.12)) right bottom / 1px 44% no-repeat,
+    radial-gradient(80% 42% at 22% 0%,rgba(255,255,255,.05),transparent 64%),
+    radial-gradient(90% 60% at 88% 16%,rgba(141,204,255,.034),transparent 70%);
+  opacity:.82;
+  pointer-events:none;
+}
+.nav-card:active{box-shadow:0 18px 52px rgba(0,0,0,.40),0 0 28px rgba(92,170,255,.12);}
+.card-icon,.card-copy,.card-arrow{position:relative;z-index:2;}
+.card-icon{
+  width:58px;
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(141,204,255,.22);
+  border-radius:8px;
+  background:linear-gradient(145deg,rgba(141,204,255,.10),rgba(255,255,255,.03));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  color:rgba(247,251,255,.92);
+}
+.card-icon svg{
+  width:58%;
+  height:58%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 10px rgba(141,204,255,.26));
+}
+.card-copy{min-width:0;}
+.card-copy small{
+  display:none;
+  margin-bottom:5px;
+  color:rgba(141,204,255,.78);
+  font-family:var(--font-mono);
+  font-size:10px;
+  letter-spacing:0;
+}
+.card-copy b{
+  display:block;
+  color:rgba(247,251,255,.96);
+  font-family:var(--font-serif);
+  font-size:clamp(24px,2.05vw,32px);
+  font-weight:400;
+  letter-spacing:0;
+  white-space:nowrap;
+}
+.nav-card.compact .card-copy b{
+  font-size:clamp(22px,1.75vw,28px);
+  line-height:1.2;
+  white-space:normal;
+}
+.card-arrow{display:none;}
+.slot-left-1{left:4.6%;top:11%;--card-delay:0s;}
+.slot-right-1{right:4.6%;top:11%;--card-delay:1.7s;}
+.slot-right-2{right:1.8%;top:28%;--card-delay:3.4s;}
+.slot-right-3{right:3.6%;top:45%;--card-delay:5.1s;}
+.slot-right-4{right:6.2%;top:62%;--card-delay:6.8s;}
+.slot-bottom{left:50%;bottom:7.4%;width:min(26vw,480px);--base-transform:translateX(-50%);--card-delay:8.5s;}
+.slot-left-4{left:6.2%;top:62%;--card-delay:10.2s;}
+.slot-left-3{left:3.6%;top:45%;--card-delay:11.9s;}
+.slot-left-2{left:1.8%;top:28%;--card-delay:13.6s;}
+.centerpiece{
+  position:relative;
+  z-index:2;
+  width:min(48vw,880px);
+  min-height:min(70vh,780px);
+  display:grid;
+  place-items:center;
+  pointer-events:none;
+  transform:translateY(-3.2vh);
+}
+.centerpiece::before{
+  display:none;
+}
+.centerpiece::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:-1.8%;
+  width:min(54vw,980px);
+  height:min(11vh,118px);
+  transform:translateX(-50%) perspective(720px) rotateX(67deg);
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at center,rgba(141,204,255,.14),transparent 58%),
+    repeating-radial-gradient(ellipse at center,transparent 0 24px,rgba(141,204,255,.16) 25px 26px,transparent 27px 48px),
+    radial-gradient(ellipse at center,transparent 55%,rgba(92,170,255,.38) 63%,transparent 74%);
+  box-shadow:0 0 54px rgba(92,170,255,.18),inset 0 0 34px rgba(141,204,255,.12);
+  opacity:.78;
+}
+.mountain-visual{
+  position:relative;
+  width:min(35vw,620px);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(141,204,255,.30);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 62%,rgba(141,204,255,.20),transparent 62%),
+    radial-gradient(circle at 42% 24%,rgba(255,255,255,.12),transparent 24%),
+    rgba(6,13,25,.16);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    0 0 30px rgba(92,170,255,.18),
+    0 0 84px rgba(92,170,255,.10),
+    inset 0 0 46px rgba(4,10,24,.42);
+  overflow:hidden;
+  isolation:isolate;
+  transform:translateY(1.4vh);
+  animation:mountain-float 14s ease-in-out infinite;
+  will-change:transform;
+}
+.mountain-visual::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:2;
+  border-radius:50%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 32% 18%,rgba(255,255,255,.22),transparent 14%),
+    linear-gradient(135deg,rgba(255,255,255,.10),transparent 35%);
+  mask:radial-gradient(circle,black 0 98%,transparent 99%);
+  opacity:.64;
+}
+.mountain-visual::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:3;
+  border-radius:50%;
+  pointer-events:none;
+  box-shadow:inset 0 0 42px rgba(92,170,255,.12),inset 0 -36px 54px rgba(7,14,28,.28);
+}
+.mountain-image{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:176%;
+  height:auto;
+  max-width:none;
+  transform:translate(-50%,-35%);
+  z-index:1;
+  filter:saturate(1.08) contrast(1.04) drop-shadow(0 0 34px rgba(92,170,255,.18));
+}
+@keyframes mountain-float{
+  0%,100%{transform:translateY(1.4vh) scale(1);}
+  50%{transform:translateY(.6vh) scale(1.01);}
+}
+.bottomline{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:max(24px,2vw);
+  color:rgba(247,251,255,.58);
+  font-family:var(--font-serif);
+  font-size:max(20px,2.05vh);
+  letter-spacing:0;
+}
+.bottomline::before,.bottomline::after{
+  content:'';
+  width:min(28vw,420px);
+  height:1px;
+  background:
+    linear-gradient(90deg,transparent,rgba(141,204,255,.16) 18%,rgba(247,251,255,.24) 46%,rgba(141,204,255,.11) 74%,transparent),
+    repeating-linear-gradient(90deg,transparent 0 34px,rgba(255,255,255,.12) 34px 35px,transparent 35px 52px);
+  mask-image:linear-gradient(90deg,transparent,black 20%,black 72%,transparent);
+  opacity:.72;
+}
+.bottomline::after{transform:scaleX(-1);}
+@keyframes card-breathe{
+  0%,78%,100%{
+    transform:var(--base-transform) scale(1);
+    border-color:rgba(168,214,255,.26);
+  }
+  10%{
+    transform:var(--base-transform) scale(1.018);
+    border-color:rgba(168,214,255,.52);
+  }
+  22%{
+    transform:var(--base-transform) scale(1.006);
+    border-color:rgba(168,214,255,.34);
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+}
+@media (max-width:900px){
+  html,body{overflow:auto;height:auto;}
+  .overview{position:relative;left:auto;top:auto;width:100%;height:auto;min-height:100dvh;aspect-ratio:auto;transform:none;}
+  .shell{min-height:100dvh;padding:24px 18px 30px;gap:24px;}
+  .topline{align-items:flex-start;flex-direction:column;}
+  .title{position:relative;left:auto;top:auto;transform:none;min-width:0;font-size:32px;padding:0 0 14px;}
+  .stage{grid-template-columns:1fr;gap:22px;width:100%;overflow:hidden;}
+  .centerpiece{width:100%;min-height:340px;pointer-events:none;transform:none;}
+  .centerpiece::before{display:none;}
+  .centerpiece::after{bottom:-7%;width:min(96vw,470px);height:86px;}
+  .mountain-visual{width:min(96vw,520px);transform:translateY(0);}
+  .orbit-nav{position:relative;inset:auto;top:auto;height:auto;display:grid;gap:14px;width:100%;pointer-events:auto;transform:none;cursor:auto;perspective:none;}
+  .orbit-strip{display:grid;gap:14px;height:auto;transform:none!important;}
+  .nav-card{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:100%;height:112px;grid-template-columns:58px 1fr;padding:18px 18px;--base-transform:translateZ(0);}
+  .card-icon{width:54px;}
+  .card-copy b{font-size:24px;}
+  .nav-card.compact .card-copy b{font-size:22px;}
+  .bottomline{font-size:17px;line-height:1.5;text-align:center;}
+}
+</style>
+</head>
+<body>
+<main class="overview">
+  <section class="shell">
+    <header class="topline" aria-hidden="true"></header>
+    <h1 class="title">高原出高峰</h1>
+    <section class="stage" aria-label="G 区页面总览">
+      <div class="centerpiece" aria-hidden="true">
+        <div class="mountain-visual">
+          <img class="mountain-image" src="assets/index-mountain-visual.png" alt="">
+        </div>
+      </div>
+      <div class="orbit-nav" aria-label="AI 科研方向">
+        <div class="orbit-strip" id="moduleStrip">
+        <div class="nav-card slot-left-1" style="--card-bg:url('assets/g5-computational-chemistry-cover-bg.png')" aria-label="AI+ 化学智能">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3v5l-5.8 9.4A2.4 2.4 0 0 0 5.2 21h13.6a2.4 2.4 0 0 0 2-3.6L15 8V3"/><path d="M8 3h8M7 15h10"/></svg></span>
+          <span class="card-copy"><b>AI+化学智能</b></span>
+        </div>
+        <div class="nav-card slot-left-2" style="--card-bg:url('assets/index-overview-bg.png')" aria-label="AI+ 高能物理">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><ellipse cx="12" cy="12" rx="9" ry="3.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(120 12 12)"/></svg></span>
+          <span class="card-copy"><b>AI+高能物理</b></span>
+        </div>
+        <div class="nav-card slot-left-3" style="--card-bg:url('assets/g4-brainomni-cover-bg.png')" aria-label="AI+ 脑机接口">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4c6 2 6 14 12 16M18 4C12 6 12 18 6 20"/><path d="M8 7h8M7 11h10M7 15h10M8 19h8"/></svg></span>
+          <span class="card-copy"><b>AI+脑机接口</b></span>
+        </div>
+        <div class="nav-card slot-left-4" style="--card-bg:url('assets/app-mechanism-bg.png')" aria-label="AI+ 生物结构">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M6.7 8.5l3.4 2.2M13.9 10.7l3.4-2.2M7.7 17l3-3.3M13.3 13.7l3 3.3"/></svg></span>
+          <span class="card-copy"><b>AI+生物结构</b></span>
+        </div>
+        <div class="nav-card slot-right-1" style="--card-bg:url('assets/arche-cover-bg.png')" aria-label="AI+ 新药创制">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 14a4 4 0 1 1 7.7-1.5c1.9.3 3.3 1.9 3.3 3.8 0 2.1-1.7 3.7-3.8 3.7H9a5 5 0 0 1-1-9.9"/><path d="M9 9V6.5a2.5 2.5 0 0 1 5 0V9M12 14v6"/></svg></span>
+          <span class="card-copy"><b>AI+新药创制</b></span>
+        </div>
+        <a class="nav-card slot-right-2" href="ai-materials.html" style="--card-bg:url('assets/g2-metamaterial-cover-bg.png')" aria-label="AI+ 材料科学">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14l8-7 8 5-8 5-8-3z"/><path d="M12 7l2 10M4 14l2 4 14-6"/></svg></span>
+          <span class="card-copy"><b>AI+材料科学</b></span>
+        </a>
+        <div class="nav-card slot-right-3" style="--card-bg:url('assets/g6-earth-discovery-cover-bg.png')" aria-label="AI+ 地球科学">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10.8 5.2l8 8a4 4 0 0 1-5.6 5.6l-8-8a4 4 0 1 1 5.6-5.6z"/><path d="M8 13l5-5"/></svg></span>
+          <span class="card-copy"><b>AI+地球科学</b></span>
+        </div>
+        <a class="nav-card slot-right-4" href="ai-quantum.html" style="--card-bg:url('assets/g3-chipdesign-cover-bg.png')" aria-label="AI+ 量子技术">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21V10"/><path d="M12 14c-4.5-.2-7-2.3-7-6.5C9.5 7.7 12 9.8 12 14z"/><path d="M12 12c4.5-.2 7-2.3 7-6.5C14.5 5.7 12 7.8 12 12z"/></svg></span>
+          <span class="card-copy"><b>AI+量子技术</b></span>
+        </a>
+        <div class="nav-card slot-bottom" style="--card-bg:url('assets/g7-cardioagent-cover-bg.png')" aria-label="AI+ 疾病诊疗">
+          <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M4 9h3M4 15h3M17 9h3M17 15h3M9 4v3M15 4v3M9 17v3M15 17v3"/></svg></span>
+          <span class="card-copy"><b>AI+疾病诊疗</b></span>
+        </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bottomline">以 AI 驱动突破科研边界</footer>
+  </section>
+</main>
+</body>
+</html>

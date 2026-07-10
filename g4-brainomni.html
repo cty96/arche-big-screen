@@ -74,41 +74,35 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   gap:min(1.55vh,16px);
   padding:min(2.7vh,30px) min(4.3vw,84px) min(2.6vh,30px);
 }
-.masthead{
-  display:flex;
-  align-items:start;
-  justify-content:flex-start;
-  gap:28px;
-}
-.title-wrap{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:min(.9vh,10px);
-}
-.mark-wrap{
-  display:flex;
-  justify-content:flex-start;
-  min-width:max-content;
-}
+.masthead{display:flex;align-items:flex-start;justify-content:flex-start;}
 .page-mark{
   display:inline-flex;
   align-items:center;
+  gap:8px;
   min-height:clamp(24px,2.2vw,36px);
-  color:rgba(141,204,255,.68);
-  font-family:var(--font-sans);
-  font-size:clamp(13px,1.08vw,18px);
-  font-weight:500;
+  padding:0 clamp(10px,.75vw,14px);
+  border:1px solid rgba(247,251,255,.12);
+  border-radius:999px;
+  background:rgba(247,251,255,.045);
+  color:rgba(247,251,255,.66);
+  font-family:var(--font-mono);
+  font-size:clamp(11px,.82vw,14px);
+  font-weight:400;
   line-height:1;
-  letter-spacing:.06em;
+  letter-spacing:.10em;
+  text-transform:uppercase;
   white-space:nowrap;
-  text-shadow:0 0 18px rgba(92,170,255,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
 }
-.main-title{
-  margin-top:min(.4vh,6px);
-  text-align:center;
+.page-mark::before{
+  content:'';
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(141,204,255,.78);
+  box-shadow:0 0 10px rgba(141,204,255,.24);
 }
+.main-title{text-align:center;}
 .main-title h2{
   font-family:var(--font-sans);
   font-size:clamp(34px,2.9vw,50px);
@@ -152,6 +146,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   display:flex;
   align-items:center;
   justify-content:center;
+  min-width:0;
 }
 .logo-item + .logo-item::before{
   content:'';
@@ -230,7 +225,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   position:relative;
   display:flex;
   align-items:flex-start;
-  gap:clamp(8px,.7vw,12px);
+  gap:0;
   color:rgba(207,235,255,.90);
   font-family:var(--font-sans);
   font-size:clamp(18px,1.32vw,24px);
@@ -242,14 +237,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   border-bottom:0;
 }
 .card-title::before{
-  content:'';
-  flex:0 0 auto;
-  width:clamp(3px,.26vw,5px);
-  height:1.05em;
-  margin-top:.07em;
-  border-radius:999px;
-  background:linear-gradient(180deg,rgba(94,231,255,.95),rgba(141,204,255,.36));
-  box-shadow:0 0 16px rgba(94,231,255,.30);
+  display:none;
 }
 .card-title::after{
   content:'';
@@ -258,7 +246,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   right:0;
   bottom:0;
   height:1px;
-  background:linear-gradient(90deg,rgba(94,231,255,.34),rgba(141,204,255,.13) 38%,transparent);
+  background:rgba(247,251,255,.10);
 }
 .card-copy{
   margin-top:min(1.05vh,12px);
@@ -728,8 +716,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   .page{position:relative;min-height:100dvh;}
   .shell{height:auto;min-height:100dvh;padding:22px 18px;grid-template-rows:auto auto auto auto;}
   .masthead{flex-direction:column;}
-  .mark-wrap{justify-content:flex-start;}
-  .page-mark{white-space:normal;font-size:24px;}
+  .page-mark{white-space:normal;font-size:14px;}
   .logo-strip{flex-wrap:wrap;gap:18px;}
   .logo-item + .logo-item::before{display:none;}
   .board{grid-template-columns:1fr;grid-template-rows:auto;gap:16px;}
@@ -744,10 +731,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
 <main class="page">
   <section class="shell">
     <header class="masthead">
-      <div class="title-wrap"></div>
-      <div class="mark-wrap">
-        <div class="page-mark" aria-label="页面角标">AI+脑机接口</div>
-      </div>
+      <div class="page-mark" aria-label="页面角标">AI+脑机接口</div>
     </header>
 
     <section class="main-title" aria-label="项目标题">

@@ -169,9 +169,9 @@ a{color:inherit;text-decoration:none;}
   backdrop-filter:blur(14px);
   pointer-events:auto;
   transform:var(--base-transform);
-  animation:card-breathe 15.3s var(--ease) infinite;
+  animation:card-breathe 18s var(--ease) infinite;
   animation-delay:var(--card-delay);
-  will-change:transform,filter;
+  will-change:transform;
 }
 .nav-card::before{
   content:'';
@@ -361,28 +361,15 @@ a{color:inherit;text-decoration:none;}
 @keyframes card-breathe{
   0%,78%,100%{
     transform:var(--base-transform) scale(1);
-    filter:brightness(1);
     border-color:rgba(168,214,255,.26);
-    box-shadow:
-      0 22px 58px rgba(0,0,0,.38),
-      inset 0 1px 0 rgba(255,255,255,.10),
-      inset 0 -1px 0 rgba(141,204,255,.08);
   }
   10%{
-    transform:var(--base-transform) scale(1.028);
-    filter:brightness(1.09);
+    transform:var(--base-transform) scale(1.018);
     border-color:rgba(168,214,255,.52);
-    box-shadow:0 30px 82px rgba(0,0,0,.48),0 0 36px rgba(92,170,255,.14),inset 0 1px 0 rgba(255,255,255,.12);
   }
   22%{
-    transform:var(--base-transform) scale(1.01);
-    filter:brightness(1.03);
+    transform:var(--base-transform) scale(1.006);
     border-color:rgba(168,214,255,.34);
-    box-shadow:
-      0 24px 64px rgba(0,0,0,.40),
-      0 0 18px rgba(92,170,255,.08),
-      inset 0 1px 0 rgba(255,255,255,.10),
-      inset 0 -1px 0 rgba(141,204,255,.08);
   }
 }
 @media (prefers-reduced-motion:reduce){
@@ -442,10 +429,10 @@ a{color:inherit;text-decoration:none;}
           <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 14a4 4 0 1 1 7.7-1.5c1.9.3 3.3 1.9 3.3 3.8 0 2.1-1.7 3.7-3.8 3.7H9a5 5 0 0 1-1-9.9"/><path d="M9 9V6.5a2.5 2.5 0 0 1 5 0V9M12 14v6"/></svg></span>
           <span class="card-copy"><b>AI+新药创制</b></span>
         </div>
-        <div class="nav-card slot-right-2" style="--card-bg:url('assets/g2-metamaterial-cover-bg.png')" aria-label="AI+ 材料科学">
+        <a class="nav-card slot-right-2" href="ai-materials.html" style="--card-bg:url('assets/g2-metamaterial-cover-bg.png')" aria-label="AI+ 材料科学">
           <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 14l8-7 8 5-8 5-8-3z"/><path d="M12 7l2 10M4 14l2 4 14-6"/></svg></span>
           <span class="card-copy"><b>AI+材料科学</b></span>
-        </div>
+        </a>
         <div class="nav-card slot-right-3" style="--card-bg:url('assets/g6-earth-discovery-cover-bg.png')" aria-label="AI+ 地球科学">
           <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10.8 5.2l8 8a4 4 0 0 1-5.6 5.6l-8-8a4 4 0 1 1 5.6-5.6z"/><path d="M8 13l5-5"/></svg></span>
           <span class="card-copy"><b>AI+地球科学</b></span>
@@ -454,9 +441,9 @@ a{color:inherit;text-decoration:none;}
           <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21V10"/><path d="M12 14c-4.5-.2-7-2.3-7-6.5C9.5 7.7 12 9.8 12 14z"/><path d="M12 12c4.5-.2 7-2.3 7-6.5C14.5 5.7 12 7.8 12 12z"/></svg></span>
           <span class="card-copy"><b>AI+量子技术</b></span>
         </a>
-        <div class="nav-card slot-bottom" style="--card-bg:url('assets/g7-cardioagent-cover-bg.png')" aria-label="AI+ 疾病诊疗领域">
+        <div class="nav-card slot-bottom" style="--card-bg:url('assets/g7-cardioagent-cover-bg.png')" aria-label="AI+ 疾病诊疗">
           <span class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M4 9h3M4 15h3M17 9h3M17 15h3M9 4v3M15 4v3M9 17v3M15 17v3"/></svg></span>
-          <span class="card-copy"><b>AI+疾病诊疗领域</b></span>
+          <span class="card-copy"><b>AI+疾病诊疗</b></span>
         </div>
         </div>
       </div>
@@ -484,6 +471,7 @@ a{color:inherit;text-decoration:none;}
   let glyphs = [];
   let frameId = 0;
   let startTime = 0;
+  let lastPaint = 0;
 
   function clamp(value, min, max){
     return Math.max(min, Math.min(max, value));
@@ -513,7 +501,7 @@ a{color:inherit;text-decoration:none;}
 
   function buildGlyphs(){
     if (!source.complete || source.naturalWidth === 0 || width === 0 || height === 0) return;
-    cols = width > 500 ? 118 : 96;
+    cols = width > 500 ? 96 : 78;
     rows = Math.round(cols * (source.naturalHeight / source.naturalWidth) * .50);
     charW = width / cols;
     charH = height / rows;
@@ -558,6 +546,7 @@ a{color:inherit;text-decoration:none;}
           ice,
           noise,
           char:charFor(clamp(28 + intensity * 225, 0, 255)),
+          baseFill:`rgba(${color.r},${color.g},${color.b},${clamp(.26 + Math.pow(intensity, 1.28) * .88 + ice * .14, .18, 1)})`,
           phase:(c * .17 + r * .31 + noise * 1.7) % (Math.PI * 2)
         });
       }
@@ -580,32 +569,35 @@ a{color:inherit;text-decoration:none;}
   }
 
   function render(now){
-  if (!startTime) startTime = now;
-  const time = reduceMotion.matches ? 0 : (now - startTime) / 1000;
+    if (!startTime) startTime = now;
+    const targetInterval = reduceMotion.matches ? 1000 : 1000 / 36;
+    if (now - lastPaint < targetInterval) {
+      frameId = requestAnimationFrame(render);
+      return;
+    }
+    lastPaint = now;
+    const time = reduceMotion.matches ? 0 : (now - startTime) / 1000;
 
-  ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, width, height);
     ctx.save();
     ctx.beginPath();
     ctx.arc(width / 2, height / 2, Math.min(width, height) * .5, 0, Math.PI * 2);
     ctx.clip();
     ctx.font = `${Math.max(8, charH * .92)}px "Courier New", monospace`;
 
-  glyphs.forEach((glyph) => {
+    glyphs.forEach((glyph) => {
       const wave = reduceMotion.matches ? 0 : Math.sin(time * (1.25 + glyph.noise * .9) + glyph.phase);
       const frost = reduceMotion.matches ? 0 : Math.sin(time * .58 + glyph.noise * 9.7 + glyph.c * .035);
-      const grain = reduceMotion.matches ? 0 : Math.sin(time * 1.85 + glyph.noise * 14.3 + glyph.r * .11);
-      const lift = Math.max(0, wave * .55 + frost * .30 + grain * .15) * (.55 + glyph.highlight * .75);
-      const mappedValue = clamp(glyph.value + wave * 8 + frost * 6 + grain * 3 + glyph.highlight * 12 - glyph.shadow * 8, 0, 255);
+      const lift = Math.max(0, wave * .58 + frost * .24) * (.55 + glyph.highlight * .75);
+      const mappedValue = clamp(glyph.value + wave * 7 + frost * 5 + glyph.highlight * 10 - glyph.shadow * 7, 0, 255);
       const char = charFor(mappedValue);
       if (char === ' ') return;
-      const alpha = clamp(glyph.alpha * (.68 + lift * .18 + glyph.highlight * .18 + glyph.ice * .04), .08, .94);
-      const r = Math.round(clamp(glyph.color.r + lift * 34 + glyph.highlight * 22 + glyph.ice * 4 - glyph.shadow * 6, 28, 252));
-      const g = Math.round(clamp(glyph.color.g + lift * 40 + glyph.highlight * 26 + glyph.ice * 8 - glyph.shadow * 4, 42, 255));
-      const b = Math.round(clamp(glyph.color.b + lift * 48 + glyph.highlight * 30 + glyph.ice * 12, 72, 255));
-      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx.globalAlpha = clamp(.72 + lift * .16 + glyph.highlight * .10, .22, .96);
+      ctx.fillStyle = glyph.baseFill;
       ctx.shadowBlur = 0;
       ctx.fillText(char, glyph.x, glyph.y);
     });
+    ctx.globalAlpha = 1;
 
     ctx.restore();
     frameId = requestAnimationFrame(render);

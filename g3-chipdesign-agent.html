@@ -71,13 +71,31 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
 }
 .masthead{display:flex;align-items:flex-start;justify-content:flex-start;}
 .page-mark{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
   min-height:clamp(24px,2.2vw,36px);
-  color:rgba(141,204,255,.68);
-  font-size:clamp(13px,1.08vw,18px);
-  font-weight:500;
+  padding:0 clamp(10px,.75vw,14px);
+  border:1px solid rgba(247,251,255,.12);
+  border-radius:999px;
+  background:rgba(247,251,255,.045);
+  color:rgba(247,251,255,.66);
+  font-family:var(--font-mono);
+  font-size:clamp(11px,.82vw,14px);
+  font-weight:400;
   line-height:1;
-  letter-spacing:.06em;
-  text-shadow:0 0 18px rgba(92,170,255,.10);
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.page-mark::before{
+  content:'';
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(141,204,255,.78);
+  box-shadow:0 0 10px rgba(141,204,255,.24);
 }
 .main-title{text-align:center;}
 .main-title h2{
@@ -193,7 +211,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   position:relative;
   display:flex;
   align-items:flex-start;
-  gap:clamp(8px,.7vw,12px);
+  gap:0;
   color:rgba(207,235,255,.90);
   font-size:clamp(18px,1.32vw,24px);
   font-weight:600;
@@ -202,14 +220,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   text-shadow:0 0 14px rgba(141,204,255,.10);
 }
 .card-title::before{
-  content:'';
-  flex:0 0 auto;
-  width:clamp(3px,.26vw,5px);
-  height:1.05em;
-  margin-top:.07em;
-  border-radius:999px;
-  background:linear-gradient(180deg,rgba(94,231,255,.95),rgba(141,204,255,.36));
-  box-shadow:0 0 16px rgba(94,231,255,.30);
+  display:none;
 }
 .card-title::after{
   content:'';
@@ -218,7 +229,7 @@ body{font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antial
   right:0;
   bottom:0;
   height:1px;
-  background:linear-gradient(90deg,rgba(94,231,255,.34),rgba(141,204,255,.13) 38%,transparent);
+  background:rgba(247,251,255,.10);
 }
 .card-copy{
   margin-top:min(1.05vh,12px);
